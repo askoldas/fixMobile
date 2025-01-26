@@ -1,84 +1,64 @@
-import { useState, useEffect } from "react";
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
+import { addDocument, updateDocument, deleteDocument } from "@/lib/firebaseUtils";
 
 export default function CategoriesManager() {
-  const [categories, setCategories] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
 
-  const [newEntry, setNewEntry] = useState({ name: "", type: "", parent: "" });
+  // Redux selectors
+  const categories = useSelector((state) => state.categories.items);
+  const loading = useSelector((state) => state.categories.loading);
+  const error = useSelector((state) => state.categories.error);
+
   const [expandedCategories, setExpandedCategories] = useState({});
 
-  // Fetch all categories on component mount
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "Devices"));
-        const fetchedCategories = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setCategories(fetchedCategories);
-      } catch (err) {
-        console.error("Error fetching categories:", err);
-        setError("Failed to fetch categories.");
-      }
-    };
+    dispatch(fetchCategories());
+  }, [dispatch]);
 
-    fetchCategories();
-  }, []);
-
-  const handleAddEntry = async () => {
-    if (!newEntry.name.trim() || !newEntry.type) {
-      setError("Name and type are required.");
+  const handleAddEntry = async (name, type, parent = "") => {
+    if (!name.trim() || !type) {
+      alert("Name and type are required.");
       return;
     }
 
-    setLoading(true);
     try {
-      const docRef = await addDoc(collection(db, "Devices"), newEntry);
-      const newCategory = { id: docRef.id, ...newEntry };
-      setCategories([...categories, newCategory]); // Update state immediately
-      setNewEntry({ name: "", type: "", parent: "" });
-      setError(null);
+      const newEntry = { name, type, parent };
+      await addDocument("Devices", newEntry);
+
+      // Refetch categories
+      dispatch(fetchCategories());
+      alert("Category added successfully!");
     } catch (err) {
       console.error("Error adding entry:", err);
-      setError("Failed to add entry.");
-    } finally {
-      setLoading(false);
+      alert("Failed to add category.");
     }
   };
 
   const handleUpdateEntry = async (id, updatedData) => {
     try {
-      const categoryRef = doc(db, "Devices", id);
-      await updateDoc(categoryRef, updatedData);
-      setCategories(categories.map((cat) => (cat.id === id ? { ...cat, ...updatedData } : cat)));
+      await updateDocument("Devices", id, updatedData);
+
+      // Refetch categories
+      dispatch(fetchCategories());
+      alert("Category updated successfully!");
     } catch (err) {
       console.error("Error updating entry:", err);
-      setError("Failed to update entry.");
+      alert("Failed to update category.");
     }
   };
 
   const handleDeleteEntry = async (id) => {
     try {
-      // Find all child categories
-      const childrenQuery = query(collection(db, "Devices"), where("parent", "==", id));
-      const childrenSnapshot = await getDocs(childrenQuery);
-      const children = childrenSnapshot.docs;
+      await deleteDocument("Devices", id);
 
-      // Delete all child categories recursively
-      for (const child of children) {
-        await handleDeleteEntry(child.id);
-      }
-
-      // Delete the category itself
-      await deleteDoc(doc(db, "Devices", id));
-      setCategories(categories.filter((cat) => cat.id !== id));
+      // Refetch categories
+      dispatch(fetchCategories());
+      alert("Category deleted successfully!");
     } catch (err) {
       console.error("Error deleting entry:", err);
-      setError("Failed to delete entry.");
+      alert("Failed to delete category.");
     }
   };
 
@@ -88,15 +68,11 @@ export default function CategoriesManager() {
 
   const buildNestedStructure = () => {
     const categoryMap = {};
-
-    // Create a map of categories by ID
     categories.forEach((cat) => {
       categoryMap[cat.id] = { ...cat, children: [] };
     });
 
     const nestedCategories = [];
-
-    // Populate the children array for each category
     categories.forEach((cat) => {
       if (cat.parent) {
         categoryMap[cat.parent]?.children.push(categoryMap[cat.id]);
@@ -112,13 +88,12 @@ export default function CategoriesManager() {
     return (
       <ul style={{ listStyle: "none", paddingLeft: "20px" }}>
         {categories.map((category) => (
-          <li key={category.id} style={{ marginBottom: "10px" }}>
+          <li key={category.id} style={{ marginBottom: "20px" }}>
             <div
               style={{
                 padding: "10px",
                 border: "1px solid #ddd",
                 borderRadius: "5px",
-                cursor: "pointer",
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
@@ -140,16 +115,71 @@ export default function CategoriesManager() {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (window.confirm("Are you sure you want to delete this entry? This will also delete all its children.")) {
+                    if (window.confirm("Are you sure you want to delete this entry?")) {
                       handleDeleteEntry(category.id);
                     }
                   }}
+                  style={{ marginRight: "10px" }}
                 >
                   Delete
                 </button>
               </span>
             </div>
-            {expandedCategories[category.id] && category.children.length > 0 && renderCategories(category.children)}
+            {expandedCategories[category.id] && category.children.length > 0 && (
+              <div style={{ marginLeft: "20px", marginTop: "10px" }}>
+                {renderCategories(category.children)}
+              </div>
+            )}
+            {expandedCategories[category.id] && category.type === "brand" && (
+              <div style={{ marginLeft: "20px", marginTop: "10px" }}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const childName = prompt("Enter new series name");
+                    if (childName) {
+                      handleAddEntry(childName, "series", category.id);
+                    }
+                  }}
+                  style={{
+                    padding: "5px 10px",
+                    cursor: "pointer",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    display: "block",
+                    marginLeft: "auto",
+                  }}
+                >
+                  Add Series
+                </button>
+              </div>
+            )}
+            {expandedCategories[category.id] && category.type === "series" && (
+              <div style={{ marginLeft: "20px", marginTop: "10px" }}>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const childName = prompt("Enter new model name");
+                    if (childName) {
+                      handleAddEntry(childName, "model", category.id);
+                    }
+                  }}
+                  style={{
+                    padding: "5px 10px",
+                    cursor: "pointer",
+                    backgroundColor: "#007bff",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "5px",
+                    display: "block",
+                    marginLeft: "auto",
+                  }}
+                >
+                  Add Model
+                </button>
+              </div>
+            )}
           </li>
         ))}
       </ul>
@@ -158,49 +188,11 @@ export default function CategoriesManager() {
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h2>Manage Brands</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {/* Add Entry */}
-      <h3>Add Entry</h3>
-      <input
-        type="text"
-        placeholder="Name"
-        value={newEntry.name}
-        onChange={(e) => setNewEntry({ ...newEntry, name: e.target.value })}
-        style={{ padding: "10px", marginRight: "10px" }}
-      />
-      <select
-        value={newEntry.type}
-        onChange={(e) => {
-          setNewEntry({ ...newEntry, type: e.target.value, parent: "" }); // Reset parent when type changes
-        }}
-        style={{ padding: "10px", marginRight: "10px" }}
-      >
-        <option value="">Select Type</option>
-        <option value="brand">Brand</option>
-        <option value="series">Series</option>
-        <option value="model">Model</option>
-      </select>
-      <select
-        value={newEntry.parent}
-        onChange={(e) => setNewEntry({ ...newEntry, parent: e.target.value })}
-        style={{ padding: "10px" }}
-        disabled={newEntry.type === "brand"} // Disable parent for brands
-      >
-        <option value="">Select Parent</option>
-        {categories
-          .filter((cat) =>
-            newEntry.type === "series" ? cat.type === "brand" : cat.type === "series"
-          )
-          .map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-      </select>
       <button
-        onClick={handleAddEntry}
+        onClick={() => {
+          const brandName = prompt("Enter new brand name");
+          if (brandName) handleAddEntry(brandName, "brand");
+        }}
         style={{
           padding: "10px 20px",
           cursor: "pointer",
@@ -208,15 +200,15 @@ export default function CategoriesManager() {
           color: "white",
           border: "none",
           borderRadius: "5px",
+          marginBottom: "20px",
+          display: "block",
+          marginLeft: "auto",
         }}
-        disabled={loading}
       >
-        {loading ? "Adding..." : "Add Entry"}
+        Add New Brand
       </button>
-
-      {/* Display Nested Categories */}
-      <h3>Brands</h3>
-      {renderCategories(buildNestedStructure())}
+      {loading ? <p>Loading...</p> : renderCategories(buildNestedStructure())}
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
