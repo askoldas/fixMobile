@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { collection, getDocs, addDoc, deleteDoc, doc } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 export default function ProductsManager() {
@@ -15,6 +15,7 @@ export default function ProductsManager() {
     models: [],
   });
   const [error, setError] = useState(null);
+  const [editingProduct, setEditingProduct] = useState(null);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -76,22 +77,65 @@ export default function ProductsManager() {
     }
   };
 
-  const addToSelected = (key, value) => {
-    setNewProduct((prev) => ({
-      ...prev,
-      [key]: [...prev[key], value],
-    }));
+  const handleEditProduct = (product) => {
+    setEditingProduct(product);
   };
 
-  const removeFromSelected = (key, value) => {
-    setNewProduct((prev) => ({
-      ...prev,
-      [key]: prev[key].filter((item) => item !== value),
-    }));
+  const handleUpdateProduct = async () => {
+    if (!editingProduct.name || !editingProduct.price || editingProduct.brands.length === 0 || editingProduct.series.length === 0 || editingProduct.models.length === 0) {
+      setError("All fields are required.");
+      return;
+    }
+    setError(null);
+
+    try {
+      const productRef = doc(db, "products", editingProduct.id);
+      await updateDoc(productRef, editingProduct);
+      setProducts(products.map((product) => (product.id === editingProduct.id ? editingProduct : product)));
+      setEditingProduct(null);
+    } catch (err) {
+      console.error("Error updating product:", err);
+      setError("Failed to update product.");
+    }
   };
 
-  const filteredSeries = categories.filter((cat) => newProduct.brands.includes(cat.parent));
-  const filteredModels = categories.filter((cat) => newProduct.series.includes(cat.parent));
+  const addToSelected = (key, value, isEditing = false) => {
+    if (isEditing) {
+      setEditingProduct((prev) => ({
+        ...prev,
+        [key]: [...prev[key], value],
+      }));
+    } else {
+      setNewProduct((prev) => ({
+        ...prev,
+        [key]: [...prev[key], value],
+      }));
+    }
+  };
+
+  const removeFromSelected = (key, value, isEditing = false) => {
+    if (isEditing) {
+      setEditingProduct((prev) => ({
+        ...prev,
+        [key]: prev[key].filter((item) => item !== value),
+      }));
+    } else {
+      setNewProduct((prev) => ({
+        ...prev,
+        [key]: prev[key].filter((item) => item !== value),
+      }));
+    }
+  };
+
+  const filteredSeries = (isEditing = false) => {
+    const selectedBrands = isEditing ? editingProduct.brands : newProduct.brands;
+    return categories.filter((cat) => selectedBrands.includes(cat.parent));
+  };
+
+  const filteredModels = (isEditing = false) => {
+    const selectedSeries = isEditing ? editingProduct.series : newProduct.series;
+    return categories.filter((cat) => selectedSeries.includes(cat.parent));
+  };
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
@@ -160,7 +204,7 @@ export default function ProductsManager() {
               style={{ padding: "10px" }}
             >
               <option value="">Select Series</option>
-              {filteredSeries.map((series) => (
+              {filteredSeries().map((series) => (
                 <option key={series.id} value={series.id}>
                   {series.name}
                 </option>
@@ -189,7 +233,7 @@ export default function ProductsManager() {
               style={{ padding: "10px" }}
             >
               <option value="">Select Model</option>
-              {filteredModels.map((model) => (
+              {filteredModels().map((model) => (
                 <option key={model.id} value={model.id}>
                   {model.name}
                 </option>
@@ -240,15 +284,107 @@ export default function ProductsManager() {
             }}
           >
             <span>{product.name} (${product.price})</span>
-            <button
-              onClick={() => handleDeleteProduct(product.id)}
-              style={{ padding: "5px 10px", backgroundColor: "#dc3545", color: "white", border: "none", borderRadius: "5px" }}
-            >
-              Delete
-            </button>
+            <div>
+              <button
+                onClick={() => handleEditProduct(product)}
+                style={{
+                  padding: "5px 10px",
+                  backgroundColor: "#ffc107",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  marginRight: "10px",
+                }}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => handleDeleteProduct(product.id)}
+                style={{
+                  padding: "5px 10px",
+                  backgroundColor: "#dc3545",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                }}
+              >
+                Delete
+              </button>
+            </div>
           </li>
         ))}
       </ul>
+      {editingProduct && (
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            backgroundColor: "white",
+            padding: "20px",
+            boxShadow: "0 0 10px rgba(0, 0, 0, 0.25)",
+            borderRadius: "5px",
+            zIndex: 1000,
+          }}
+        >
+          <h3>Edit Product</h3>
+          <input
+            type="text"
+            placeholder="Product Name"
+            value={editingProduct.name}
+            onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
+            style={{ marginRight: "10px", padding: "10px", width: "100%" }}
+          />
+          <input
+            type="text"
+            placeholder="Price"
+            value={editingProduct.price}
+            onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
+            style={{ marginRight: "10px", padding: "10px", width: "100%" }}
+          />
+          <input
+            type="text"
+            placeholder="Heading"
+            value={editingProduct.heading}
+            onChange={(e) => setEditingProduct({ ...editingProduct, heading: e.target.value })}
+            style={{ marginRight: "10px", padding: "10px", width: "100%" }}
+          />
+          <textarea
+            placeholder="Description"
+            value={editingProduct.description}
+            onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
+            style={{ marginRight: "10px", padding: "10px", width: "100%", marginTop: "10px" }}
+          ></textarea>
+          <button
+            onClick={handleUpdateProduct}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "#007bff",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              marginTop: "10px",
+              marginRight: "10px",
+            }}
+          >
+            Save
+          </button>
+          <button
+            onClick={() => setEditingProduct(null)}
+            style={{
+              padding: "10px 20px",
+              backgroundColor: "#dc3545",
+              color: "white",
+              border: "none",
+              borderRadius: "5px",
+              marginTop: "10px",
+            }}
+          >
+            Cancel
+          </button>
+        </div>
+      )}
     </div>
   );
 }
