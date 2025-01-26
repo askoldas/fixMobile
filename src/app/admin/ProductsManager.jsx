@@ -1,312 +1,94 @@
-import { useState, useEffect } from "react";
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  fetchProducts,
+  deleteProduct,
+  addProduct,
+  updateProduct,
+} from "@/store/slices/productsSlice";
+import { fetchCategories } from "@/store/slices/categoriesSlice";
+import { fetchDocuments } from "@/lib/firebaseUtils";
+import ProductFormModal from "@/app/admin/modals/ProductFormModal";
+import styles from "./styles/products-manager.module.scss";
 
 export default function ProductsManager() {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    price: "",
-    heading: "",
-    description: "",
-    brands: [],
-    series: [],
-    models: [],
-  });
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+
+  // Redux selectors
+  const products = useSelector((state) => state.products.items);
+  const categories = useSelector((state) => state.categories.items);
+  const error = useSelector((state) => state.products.error || state.categories.error);
+
+  const [productTypes, setProductTypes] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
+  // Fetch products, categories, and product types on mount
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "products"));
-        setProducts(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      } catch (err) {
-        console.error("Error fetching products:", err);
-        setError("Failed to fetch products.");
-      }
-    };
+    dispatch(fetchProducts());
+    dispatch(fetchCategories());
+    fetchProductTypes();
+  }, [dispatch]);
 
-    const fetchCategories = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, "Devices"));
-        setCategories(querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
-      } catch (err) {
-        console.error("Error fetching categories:", err);
-        setError("Failed to fetch categories.");
-      }
-    };
-
-    fetchProducts();
-    fetchCategories();
-  }, []);
-
-  const handleAddProduct = async () => {
-    if (!newProduct.name || !newProduct.price || newProduct.brands.length === 0 || newProduct.series.length === 0 || newProduct.models.length === 0) {
-      setError("All fields are required.");
-      return;
-    }
-    setError(null);
-
+  const fetchProductTypes = async () => {
     try {
-      await addDoc(collection(db, "products"), newProduct);
-      setProducts([...products, newProduct]);
-      setNewProduct({
-        name: "",
-        price: "",
-        heading: "",
-        description: "",
-        brands: [],
-        series: [],
-        models: [],
-      });
+      const types = await fetchDocuments("ProductTypes");
+      setProductTypes(types);
     } catch (err) {
-      console.error("Error adding product:", err);
-      setError("Failed to add product.");
+      console.error("Error fetching product types:", err);
     }
   };
 
-  const handleDeleteProduct = async (id) => {
-    try {
-      await deleteDoc(doc(db, "products", id));
-      setProducts(products.filter((product) => product.id !== id));
-    } catch (err) {
-      console.error("Error deleting product:", err);
-      setError("Failed to delete product.");
+  const handleDeleteProduct = (id) => {
+    if (window.confirm("Are you sure you want to delete this product?")) {
+      dispatch(deleteProduct(id));
     }
+  };
+
+  const handleAddProduct = () => {
+    setEditingProduct(null);
+    setIsModalOpen(true);
   };
 
   const handleEditProduct = (product) => {
     setEditingProduct(product);
+    setIsModalOpen(true);
   };
 
-  const handleUpdateProduct = async () => {
-    if (!editingProduct.name || !editingProduct.price || editingProduct.brands.length === 0 || editingProduct.series.length === 0 || editingProduct.models.length === 0) {
-      setError("All fields are required.");
-      return;
-    }
-    setError(null);
-
-    try {
-      const productRef = doc(db, "products", editingProduct.id);
-      await updateDoc(productRef, editingProduct);
-      setProducts(products.map((product) => (product.id === editingProduct.id ? editingProduct : product)));
-      setEditingProduct(null);
-    } catch (err) {
-      console.error("Error updating product:", err);
-      setError("Failed to update product.");
-    }
-  };
-
-  const addToSelected = (key, value, isEditing = false) => {
-    if (isEditing) {
-      setEditingProduct((prev) => ({
-        ...prev,
-        [key]: [...prev[key], value],
-      }));
+  const handleFormSubmit = (productData) => {
+    if (editingProduct) {
+      dispatch(updateProduct({ ...editingProduct, ...productData }));
+      alert("Product updated successfully!");
     } else {
-      setNewProduct((prev) => ({
-        ...prev,
-        [key]: [...prev[key], value],
-      }));
+      dispatch(addProduct(productData));
+      alert("Product added successfully!");
     }
-  };
-
-  const removeFromSelected = (key, value, isEditing = false) => {
-    if (isEditing) {
-      setEditingProduct((prev) => ({
-        ...prev,
-        [key]: prev[key].filter((item) => item !== value),
-      }));
-    } else {
-      setNewProduct((prev) => ({
-        ...prev,
-        [key]: prev[key].filter((item) => item !== value),
-      }));
-    }
-  };
-
-  const filteredSeries = (isEditing = false) => {
-    const selectedBrands = isEditing ? editingProduct.brands : newProduct.brands;
-    return categories.filter((cat) => selectedBrands.includes(cat.parent));
-  };
-
-  const filteredModels = (isEditing = false) => {
-    const selectedSeries = isEditing ? editingProduct.series : newProduct.series;
-    return categories.filter((cat) => selectedSeries.includes(cat.parent));
+    setIsModalOpen(false);
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
+    <div className={styles["manager-container"]}>
       <h2>Products</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <div style={{ marginBottom: "20px" }}>
-        <input
-          type="text"
-          placeholder="Product Name"
-          value={newProduct.name}
-          onChange={(e) => setNewProduct({ ...newProduct, name: e.target.value })}
-          style={{ marginRight: "10px", padding: "10px" }}
-        />
-        <input
-          type="text"
-          placeholder="Price"
-          value={newProduct.price}
-          onChange={(e) => setNewProduct({ ...newProduct, price: e.target.value })}
-          style={{ marginRight: "10px", padding: "10px" }}
-        />
-        <input
-          type="text"
-          placeholder="Heading"
-          value={newProduct.heading}
-          onChange={(e) => setNewProduct({ ...newProduct, heading: e.target.value })}
-          style={{ marginRight: "10px", padding: "10px" }}
-        />
-        <textarea
-          placeholder="Description"
-          value={newProduct.description}
-          onChange={(e) => setNewProduct({ ...newProduct, description: e.target.value })}
-          style={{ marginRight: "10px", padding: "10px", width: "100%", marginTop: "10px" }}
-        ></textarea>
-
-        <div style={{ marginBottom: "10px", display: "flex", flexWrap: "wrap", gap: "10px" }}>
-          <select
-            onChange={(e) => addToSelected("brands", e.target.value)}
-            style={{ padding: "10px" }}
-          >
-            <option value="">Select Brand</option>
-            {categories.filter((cat) => cat.type === "brand").map((brand) => (
-              <option key={brand.id} value={brand.id}>
-                {brand.name}
-              </option>
-            ))}
-          </select>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", gap: "10px" }}>
-            {newProduct.brands.map((brand) => (
-              <li key={brand} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                {categories.find((cat) => cat.id === brand)?.name}
-                <button
-                  onClick={() => removeFromSelected("brands", brand)}
-                  style={{ color: "red", cursor: "pointer", border: "none", background: "none" }}
-                >
-                  ×
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {newProduct.brands.length > 0 && (
-          <div style={{ marginBottom: "10px", display: "flex", flexWrap: "wrap", gap: "10px" }}>
-            <select
-              onChange={(e) => addToSelected("series", e.target.value)}
-              style={{ padding: "10px" }}
-            >
-              <option value="">Select Series</option>
-              {filteredSeries().map((series) => (
-                <option key={series.id} value={series.id}>
-                  {series.name}
-                </option>
-              ))}
-            </select>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", gap: "10px" }}>
-              {newProduct.series.map((series) => (
-                <li key={series} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  {categories.find((cat) => cat.id === series)?.name}
-                  <button
-                    onClick={() => removeFromSelected("series", series)}
-                    style={{ color: "red", cursor: "pointer", border: "none", background: "none" }}
-                  >
-                    ×
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {newProduct.series.length > 0 && (
-          <div style={{ marginBottom: "10px", display: "flex", flexWrap: "wrap", gap: "10px" }}>
-            <select
-              onChange={(e) => addToSelected("models", e.target.value)}
-              style={{ padding: "10px" }}
-            >
-              <option value="">Select Model</option>
-              {filteredModels().map((model) => (
-                <option key={model.id} value={model.id}>
-                  {model.name}
-                </option>
-              ))}
-            </select>
-            <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", gap: "10px" }}>
-              {newProduct.models.map((model) => (
-                <li key={model} style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  {categories.find((cat) => cat.id === model)?.name}
-                  <button
-                    onClick={() => removeFromSelected("models", model)}
-                    style={{ color: "red", cursor: "pointer", border: "none", background: "none" }}
-                  >
-                    ×
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        <button
-          onClick={handleAddProduct}
-          style={{
-            padding: "10px 20px",
-            backgroundColor: "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            marginTop: "10px",
-          }}
-        >
-          Add Product
-        </button>
-      </div>
-      <ul style={{ listStyle: "none", padding: 0 }}>
+      {error && <p className={styles["error-message"]}>{error}</p>}
+      <button className={styles["add-button"]} onClick={handleAddProduct}>
+        Add New Product
+      </button>
+      <ul className={styles["product-list"]}>
         {products.map((product) => (
-          <li
-            key={product.id}
-            style={{
-              marginBottom: "10px",
-              padding: "10px",
-              border: "1px solid #ddd",
-              borderRadius: "5px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span>{product.name} (${product.price})</span>
-            <div>
+          <li key={product.id} className={styles["product-item"]}>
+            <span>
+              {product.name} (${product.price})
+            </span>
+            <div className={styles["product-actions"]}>
               <button
+                className={styles["edit-button"]}
                 onClick={() => handleEditProduct(product)}
-                style={{
-                  padding: "5px 10px",
-                  backgroundColor: "#ffc107",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "5px",
-                  marginRight: "10px",
-                }}
               >
                 Edit
               </button>
               <button
+                className={styles["delete-button"]}
                 onClick={() => handleDeleteProduct(product.id)}
-                style={{
-                  padding: "5px 10px",
-                  backgroundColor: "#dc3545",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "5px",
-                }}
               >
                 Delete
               </button>
@@ -314,76 +96,16 @@ export default function ProductsManager() {
           </li>
         ))}
       </ul>
-      {editingProduct && (
-        <div
-          style={{
-            position: "fixed",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "white",
-            padding: "20px",
-            boxShadow: "0 0 10px rgba(0, 0, 0, 0.25)",
-            borderRadius: "5px",
-            zIndex: 1000,
-          }}
-        >
-          <h3>Edit Product</h3>
-          <input
-            type="text"
-            placeholder="Product Name"
-            value={editingProduct.name}
-            onChange={(e) => setEditingProduct({ ...editingProduct, name: e.target.value })}
-            style={{ marginRight: "10px", padding: "10px", width: "100%" }}
-          />
-          <input
-            type="text"
-            placeholder="Price"
-            value={editingProduct.price}
-            onChange={(e) => setEditingProduct({ ...editingProduct, price: e.target.value })}
-            style={{ marginRight: "10px", padding: "10px", width: "100%" }}
-          />
-          <input
-            type="text"
-            placeholder="Heading"
-            value={editingProduct.heading}
-            onChange={(e) => setEditingProduct({ ...editingProduct, heading: e.target.value })}
-            style={{ marginRight: "10px", padding: "10px", width: "100%" }}
-          />
-          <textarea
-            placeholder="Description"
-            value={editingProduct.description}
-            onChange={(e) => setEditingProduct({ ...editingProduct, description: e.target.value })}
-            style={{ marginRight: "10px", padding: "10px", width: "100%", marginTop: "10px" }}
-          ></textarea>
-          <button
-            onClick={handleUpdateProduct}
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#007bff",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              marginTop: "10px",
-              marginRight: "10px",
-            }}
-          >
-            Save
-          </button>
-          <button
-            onClick={() => setEditingProduct(null)}
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#dc3545",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              marginTop: "10px",
-            }}
-          >
-            Cancel
-          </button>
-        </div>
+
+      {isModalOpen && (
+        <ProductFormModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onSubmit={handleFormSubmit}
+          initialData={editingProduct}
+          categories={categories}
+          productTypes={productTypes}
+        />
       )}
     </div>
   );
