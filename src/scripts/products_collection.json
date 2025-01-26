@@ -1,0 +1,29 @@
+[
+    {
+      "name": "Samsung Battery EB-BG950ABE 3000 mAh SM-G950 Galaxy S8 GH82-14642A",
+      "brand": "Samsung",
+      "series": "S series",
+      "model": "Samsung Galaxy S8",
+      "description": "Info: Samsung Battery EB-BG950ABE 3000 mAh SM-G950 Galaxy S8 GH82-14642A. Suitable for Samsung Galaxy S8.",
+      "imageUrls": [
+        "https://mpsmobile.de/data/product/images/detail/normal/31FED876-F239-0A7F-9E30-2788C550EFDD.jpg",
+        "https://mpsmobile.de/data/product/images/detail/normal/521850D6-19E9-5262-2665-28E01B402A78.jpg"
+      ],
+      "productType": "Batteries",
+      "price": 10
+    },
+    {
+      "name": "Samsung Battery EB-BG955ABE 3500 mAh SM-G955F Galaxy S8+ GH82-14656A",
+      "brand": "Samsung",
+      "series": "S series",
+      "model": "Samsung Galaxy S8+",
+      "description": "Info: Samsung Battery EB-BG955ABE 3500 mAh SM-G955F Galaxy S8+ GH82-14656A. Suitable for Samsung Galaxy S8+.",
+      "imageUrls": [
+        "https://mpsmobile.de/data/product/images/detail/normal/5C52FC42-A7E5-8F44-41DA-1E9810C26FEE.jpg",
+        "https://mpsmobile.de/data/product/images/detail/normal/93DD5F03-55B5-D035-CA9C-BFEB5A62E822.jpg"
+      ],
+      "productType": "Batteries",
+      "price": 20
+    }
+  ]
+  

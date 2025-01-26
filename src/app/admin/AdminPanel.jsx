@@ -3,6 +3,7 @@
 import { useState } from "react";
 import CategoriesManager from "./CategoriesManager";
 import ProductsManager from "./ProductsManager";
+import ProductTypesManager from "./ProductTypesManager"; // Import the Product Types Manager
 
 export default function CustomAdminPanel() {
   const [activeTab, setActiveTab] = useState("categories");
@@ -27,6 +28,7 @@ export default function CustomAdminPanel() {
         </button>
         <button
           style={{
+            marginRight: "10px",
             padding: "10px 20px",
             cursor: "pointer",
             backgroundColor: activeTab === "products" ? "#007bff" : "#e0e0e0",
@@ -38,10 +40,24 @@ export default function CustomAdminPanel() {
         >
           Products
         </button>
+        <button
+          style={{
+            padding: "10px 20px",
+            cursor: "pointer",
+            backgroundColor: activeTab === "product-types" ? "#007bff" : "#e0e0e0",
+            color: activeTab === "product-types" ? "white" : "black",
+            border: "none",
+            borderRadius: "5px",
+          }}
+          onClick={() => setActiveTab("product-types")}
+        >
+          Product Types
+        </button>
       </div>
       <div>
         {activeTab === "categories" && <CategoriesManager />}
         {activeTab === "products" && <ProductsManager />}
+        {activeTab === "product-types" && <ProductTypesManager />}
       </div>
     </div>
   );
