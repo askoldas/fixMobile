@@ -1,0 +1,107 @@
+.manager-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  
+    .add-button {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      display: block;
+      transition: background-color 0.3s;
+  
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  
+    .types-list {
+      list-style: none;
+      padding-left: 20px;
+  
+      .type-item {
+        margin-bottom: 20px;
+  
+        .type-details {
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #f9f9f9;
+          cursor: pointer;
+          transition: background-color 0.3s;
+  
+          &:hover {
+            background-color: #f1f1f1;
+          }
+  
+          span {
+            font-weight: 500;
+          }
+  
+          .type-actions {
+            display: flex;
+            gap: 10px;
+  
+            button {
+              padding: 5px 10px;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              transition: opacity 0.3s;
+  
+              &:hover {
+                opacity: 0.8;
+              }
+  
+              &.edit-button {
+                background-color: #ffc107;
+                color: white;
+              }
+  
+              &.delete-button {
+                background-color: #dc3545;
+                color: white;
+              }
+            }
+          }
+        }
+      }
+  
+      .nested-types {
+        margin-left: 20px;
+        margin-top: 10px;
+      }
+  
+      .add-child-container {
+        margin-top: 10px;
+  
+        .add-child-button {
+          padding: 5px 10px;
+          cursor: pointer;
+          background-color: #007bff;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          display: block;
+          margin-left: auto;
+          transition: background-color 0.3s;
+  
+          &:hover {
+            background-color: #0056b3;
+          }
+        }
+      }
+    }
+  
+    .error-message {
+      color: red;
+      font-weight: bold;
+    }
+  }
+  
