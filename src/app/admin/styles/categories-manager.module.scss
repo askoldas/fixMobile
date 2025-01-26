@@ -1,0 +1,110 @@
+.manager-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  
+    .add-button {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      display: inline-block; /* Aligns the button with the left side */
+      transition: background-color 0.3s;
+  
+      &:hover {
+        background-color: #0056b3;
+      }
+    }
+  
+    .categories-list {
+      list-style: none;
+      padding-left: 0;
+  
+      .category-item {
+        margin-bottom: 15px;
+  
+        .category-details {
+          padding: 10px;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          background-color: #f9f9f9;
+          transition: background-color 0.3s;
+          cursor: pointer;
+  
+          &:hover {
+            background-color: #f1f1f1;
+          }
+  
+          span {
+            font-weight: 500;
+          }
+  
+          .category-actions {
+            display: flex;
+            gap: 10px;
+  
+            button {
+              padding: 5px 10px;
+              border: none;
+              border-radius: 5px;
+              cursor: pointer;
+              transition: opacity 0.3s;
+  
+              &:hover {
+                opacity: 0.8;
+              }
+  
+              &.edit-button {
+                background-color: #ffc107;
+                color: white;
+              }
+  
+              &.delete-button {
+                background-color: #dc3545;
+                color: white;
+              }
+            }
+          }
+        }
+      }
+  
+      .nested-categories {
+        margin-left: 20px;
+        margin-top: 10px;
+        padding-top: 10px; /* Ensures consistent spacing from parent category */
+      }
+  
+      .add-child-container {
+        margin-top: 10px;
+        padding-left: 20px; /* Ensures alignment with nested categories */
+        display: flex;
+        justify-content: flex-start;
+      }
+  
+      .add-child-button {
+        padding: 5px 10px;
+        cursor: pointer;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        display: inline-block;
+        transition: background-color 0.3s;
+  
+        &:hover {
+          background-color: #0056b3;
+        }
+      }
+    }
+  
+    .error-message {
+      color: red;
+      font-weight: bold;
+    }
+  }
+  
