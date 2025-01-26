@@ -6,8 +6,6 @@ export default function CategoriesManager() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const [newEntry, setNewEntry] = useState({ name: "", type: "", parent: "" });
   const [expandedCategories, setExpandedCategories] = useState({});
 
   // Fetch all categories on component mount
@@ -29,18 +27,18 @@ export default function CategoriesManager() {
     fetchCategories();
   }, []);
 
-  const handleAddEntry = async () => {
-    if (!newEntry.name.trim() || !newEntry.type) {
+  const handleAddEntry = async (name, type, parent = "") => {
+    if (!name.trim() || !type) {
       setError("Name and type are required.");
       return;
     }
 
     setLoading(true);
     try {
+      const newEntry = { name, type, parent };
       const docRef = await addDoc(collection(db, "Devices"), newEntry);
       const newCategory = { id: docRef.id, ...newEntry };
       setCategories([...categories, newCategory]); // Update state immediately
-      setNewEntry({ name: "", type: "", parent: "" });
       setError(null);
     } catch (err) {
       console.error("Error adding entry:", err);
@@ -108,7 +106,7 @@ export default function CategoriesManager() {
     return nestedCategories;
   };
 
-  const renderCategories = (categories) => {
+  const renderCategories = (categories, parentId = "") => {
     return (
       <ul style={{ listStyle: "none", paddingLeft: "20px" }}>
         {categories.map((category) => (
@@ -122,6 +120,7 @@ export default function CategoriesManager() {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
+                marginBottom: "10px",
               }}
               onClick={() => toggleExpand(category.id)}
             >
@@ -144,12 +143,47 @@ export default function CategoriesManager() {
                       handleDeleteEntry(category.id);
                     }
                   }}
+                  style={{ marginRight: "10px" }}
                 >
                   Delete
                 </button>
               </span>
             </div>
-            {expandedCategories[category.id] && category.children.length > 0 && renderCategories(category.children)}
+            {expandedCategories[category.id] && (
+              <div style={{ marginLeft: "20px", marginTop: "10px" }}>
+                {category.children.length > 0 && renderCategories(category.children)}
+                {category.type !== "model" && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const childName = prompt(
+                        `Enter new ${category.type === "brand" ? "series" : "model"} name`
+                      );
+                      if (childName) {
+                        handleAddEntry(
+                          childName,
+                          category.type === "brand" ? "series" : "model",
+                          category.id
+                        );
+                      }
+                    }}
+                    style={{
+                      padding: "5px 10px",
+                      cursor: "pointer",
+                      backgroundColor: "#007bff",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "5px",
+                      marginTop: "10px",
+                      display: "block",
+                      marginLeft: "auto",
+                    }}
+                  >
+                    Add {category.type === "brand" ? "Series" : "Model"}
+                  </button>
+                )}
+              </div>
+            )}
           </li>
         ))}
       </ul>
@@ -158,49 +192,11 @@ export default function CategoriesManager() {
 
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h2>Manage Brands</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      {/* Add Entry */}
-      <h3>Add Entry</h3>
-      <input
-        type="text"
-        placeholder="Name"
-        value={newEntry.name}
-        onChange={(e) => setNewEntry({ ...newEntry, name: e.target.value })}
-        style={{ padding: "10px", marginRight: "10px" }}
-      />
-      <select
-        value={newEntry.type}
-        onChange={(e) => {
-          setNewEntry({ ...newEntry, type: e.target.value, parent: "" }); // Reset parent when type changes
-        }}
-        style={{ padding: "10px", marginRight: "10px" }}
-      >
-        <option value="">Select Type</option>
-        <option value="brand">Brand</option>
-        <option value="series">Series</option>
-        <option value="model">Model</option>
-      </select>
-      <select
-        value={newEntry.parent}
-        onChange={(e) => setNewEntry({ ...newEntry, parent: e.target.value })}
-        style={{ padding: "10px" }}
-        disabled={newEntry.type === "brand"} // Disable parent for brands
-      >
-        <option value="">Select Parent</option>
-        {categories
-          .filter((cat) =>
-            newEntry.type === "series" ? cat.type === "brand" : cat.type === "series"
-          )
-          .map((cat) => (
-            <option key={cat.id} value={cat.id}>
-              {cat.name}
-            </option>
-          ))}
-      </select>
       <button
-        onClick={handleAddEntry}
+        onClick={() => {
+          const brandName = prompt("Enter new brand name");
+          if (brandName) handleAddEntry(brandName, "brand");
+        }}
         style={{
           padding: "10px 20px",
           cursor: "pointer",
@@ -208,14 +204,14 @@ export default function CategoriesManager() {
           color: "white",
           border: "none",
           borderRadius: "5px",
+          marginBottom: "20px",
+          display: "block",
+          marginLeft: "auto",
         }}
-        disabled={loading}
       >
-        {loading ? "Adding..." : "Add Entry"}
+        Add New Brand
       </button>
 
-      {/* Display Nested Categories */}
-      <h3>Brands</h3>
       {renderCategories(buildNestedStructure())}
     </div>
   );
