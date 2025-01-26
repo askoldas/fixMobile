@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { collection, getDocs, addDoc } from "firebase/firestore";
+import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 
 export default function CategoriesManager() {
@@ -8,16 +8,13 @@ export default function CategoriesManager() {
   const [error, setError] = useState(null);
 
   const [newEntry, setNewEntry] = useState({ name: "", type: "", parent: "" });
-  const [currentParentId, setCurrentParentId] = useState(null); // Track the selected brand
-  const [currentChildId, setCurrentChildId] = useState(null); // Track the selected series
-  const [filteredCategories, setFilteredCategories] = useState([]); // Series
-  const [filteredSubcategories, setFilteredSubcategories] = useState([]); // Models
+  const [expandedCategories, setExpandedCategories] = useState({});
 
   // Fetch all categories on component mount
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const querySnapshot = await getDocs(collection(db, "categories"));
+        const querySnapshot = await getDocs(collection(db, "Devices"));
         const fetchedCategories = querySnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
@@ -32,28 +29,6 @@ export default function CategoriesManager() {
     fetchCategories();
   }, []);
 
-  // Filter series when a brand is selected
-  useEffect(() => {
-    if (currentParentId) {
-      const filtered = categories.filter((cat) => cat.parent === currentParentId);
-      setFilteredCategories(filtered);
-    } else {
-      setFilteredCategories([]);
-    }
-    setFilteredSubcategories([]); // Reset models
-    setCurrentChildId(null); // Reset selected series
-  }, [currentParentId, categories]);
-
-  // Filter models when a series is selected
-  useEffect(() => {
-    if (currentChildId) {
-      const filtered = categories.filter((cat) => cat.parent === currentChildId);
-      setFilteredSubcategories(filtered);
-    } else {
-      setFilteredSubcategories([]);
-    }
-  }, [currentChildId, categories]);
-
   const handleAddEntry = async () => {
     if (!newEntry.name.trim() || !newEntry.type) {
       setError("Name and type are required.");
@@ -62,7 +37,7 @@ export default function CategoriesManager() {
 
     setLoading(true);
     try {
-      const docRef = await addDoc(collection(db, "categories"), newEntry);
+      const docRef = await addDoc(collection(db, "Devices"), newEntry);
       const newCategory = { id: docRef.id, ...newEntry };
       setCategories([...categories, newCategory]); // Update state immediately
       setNewEntry({ name: "", type: "", parent: "" });
@@ -75,9 +50,115 @@ export default function CategoriesManager() {
     }
   };
 
+  const handleUpdateEntry = async (id, updatedData) => {
+    try {
+      const categoryRef = doc(db, "Devices", id);
+      await updateDoc(categoryRef, updatedData);
+      setCategories(categories.map((cat) => (cat.id === id ? { ...cat, ...updatedData } : cat)));
+    } catch (err) {
+      console.error("Error updating entry:", err);
+      setError("Failed to update entry.");
+    }
+  };
+
+  const handleDeleteEntry = async (id) => {
+    try {
+      // Find all child categories
+      const childrenQuery = query(collection(db, "Devices"), where("parent", "==", id));
+      const childrenSnapshot = await getDocs(childrenQuery);
+      const children = childrenSnapshot.docs;
+
+      // Delete all child categories recursively
+      for (const child of children) {
+        await handleDeleteEntry(child.id);
+      }
+
+      // Delete the category itself
+      await deleteDoc(doc(db, "Devices", id));
+      setCategories(categories.filter((cat) => cat.id !== id));
+    } catch (err) {
+      console.error("Error deleting entry:", err);
+      setError("Failed to delete entry.");
+    }
+  };
+
+  const toggleExpand = (id) => {
+    setExpandedCategories((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const buildNestedStructure = () => {
+    const categoryMap = {};
+
+    // Create a map of categories by ID
+    categories.forEach((cat) => {
+      categoryMap[cat.id] = { ...cat, children: [] };
+    });
+
+    const nestedCategories = [];
+
+    // Populate the children array for each category
+    categories.forEach((cat) => {
+      if (cat.parent) {
+        categoryMap[cat.parent]?.children.push(categoryMap[cat.id]);
+      } else {
+        nestedCategories.push(categoryMap[cat.id]);
+      }
+    });
+
+    return nestedCategories;
+  };
+
+  const renderCategories = (categories) => {
+    return (
+      <ul style={{ listStyle: "none", paddingLeft: "20px" }}>
+        {categories.map((category) => (
+          <li key={category.id} style={{ marginBottom: "10px" }}>
+            <div
+              style={{
+                padding: "10px",
+                border: "1px solid #ddd",
+                borderRadius: "5px",
+                cursor: "pointer",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+              onClick={() => toggleExpand(category.id)}
+            >
+              <span>{category.name} ({category.type})</span>
+              <span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const newName = prompt("Enter new name", category.name);
+                    if (newName) handleUpdateEntry(category.id, { name: newName });
+                  }}
+                  style={{ marginRight: "10px" }}
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (window.confirm("Are you sure you want to delete this entry? This will also delete all its children.")) {
+                      handleDeleteEntry(category.id);
+                    }
+                  }}
+                >
+                  Delete
+                </button>
+              </span>
+            </div>
+            {expandedCategories[category.id] && category.children.length > 0 && renderCategories(category.children)}
+          </li>
+        ))}
+      </ul>
+    );
+  };
+
   return (
     <div style={{ padding: "20px", fontFamily: "Arial, sans-serif" }}>
-      <h2>Manage Categories</h2>
+      <h2>Manage Brands</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
 
       {/* Add Entry */}
@@ -133,73 +214,9 @@ export default function CategoriesManager() {
         {loading ? "Adding..." : "Add Entry"}
       </button>
 
-      {/* Display Brands */}
+      {/* Display Nested Categories */}
       <h3>Brands</h3>
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {categories
-          .filter((cat) => !cat.parent) // Only brands
-          .map((cat) => (
-            <li
-              key={cat.id}
-              onClick={() => setCurrentParentId(cat.id)} // Set current brand to filter series
-              style={{
-                cursor: "pointer",
-                marginBottom: "10px",
-                padding: "10px",
-                border: "1px solid #ddd",
-                borderRadius: "5px",
-              }}
-            >
-              {cat.name} ({cat.type})
-            </li>
-          ))}
-      </ul>
-
-      {/* Display Series */}
-      {filteredCategories.length > 0 && (
-        <>
-          <h3>Series</h3>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            {filteredCategories.map((series) => (
-              <li
-                key={series.id}
-                onClick={() => setCurrentChildId(series.id)} // Set series to filter models
-                style={{
-                  cursor: "pointer",
-                  marginBottom: "10px",
-                  padding: "10px",
-                  border: "1px solid #ddd",
-                  borderRadius: "5px",
-                }}
-              >
-                {series.name} ({series.type})
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
-
-      {/* Display Models */}
-      {filteredSubcategories.length > 0 && (
-        <>
-          <h3>Models</h3>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            {filteredSubcategories.map((model) => (
-              <li
-                key={model.id}
-                style={{
-                  marginBottom: "10px",
-                  padding: "10px",
-                  border: "1px solid #ddd",
-                  borderRadius: "5px",
-                }}
-              >
-                {model.name} ({model.type})
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+      {renderCategories(buildNestedStructure())}
     </div>
   );
 }
