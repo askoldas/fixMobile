@@ -5,8 +5,8 @@ export default function ProductFormModal({
   onClose,
   onSubmit,
   initialData = null,
-  categories,
-  productTypes,
+  categories = [],
+  productTypes = [],
 }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -21,7 +21,17 @@ export default function ProductFormModal({
 
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData);
+      // Validate initialData and fill missing fields with defaults
+      setFormData({
+        name: initialData.name || "",
+        price: initialData.price || "",
+        heading: initialData.heading || "",
+        description: initialData.description || "",
+        brands: initialData.brands || [],
+        series: initialData.series || [],
+        models: initialData.models || [],
+        productType: initialData.productType || "",
+      });
     }
   }, [initialData]);
 
