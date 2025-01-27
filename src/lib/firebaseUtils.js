@@ -6,25 +6,27 @@ import { db } from "./firebase"; // Import your Firebase config
  * @param {Array} documents - The array of documents to validate.
  * @returns {Array} Validated and normalized documents.
  */
-// const validateDocuments = (documents) => {
-//   return documents.map((doc) => ({
-//     id: doc.id || "",
-//     name: doc.name || "Unnamed Product",
-//     price: doc.price || 0, // Default price to 0
-//     description: doc.description || "",
-//     categoryId: doc.categoryId || "unknown",
-//     productTypeId: doc.productTypeId || "unknown",
-//     imageUrls: Array.isArray(doc.imageUrls) ? doc.imageUrls : [], // Ensure it's an array
-//   }));
-// };
 const validateDocuments = (documents) => {
-    return documents.map((doc) => ({
-      id: doc.id || "",
-      name: doc.name || "Unnamed Product Type", // Ensure a default name
-      parent: doc.parent || null, // Allow null or parent ID
-      ...doc, // Include other fields as-is
-    }));
-  };
+  return documents.map((doc) => ({
+    id: doc.id || "",
+    name: doc.name || "Unnamed Product",
+    price: doc.price || 0, // Default price to 0
+    description: doc.description || "",
+    categoryId: doc.categoryId || "unknown",
+    productTypeId: doc.productTypeId || "unknown",
+    imageUrls: Array.isArray(doc.imageUrls) ? doc.imageUrls : [], // Ensure it's an array
+  }));
+};
+
+
+// const validateDocuments = (documents) => {
+//     return documents.map((doc) => ({
+//       id: doc.id || "",
+//       name: doc.name || "Unnamed Product Type", // Ensure a default name
+//       parent: doc.parent || null, // Allow null or parent ID
+//       ...doc, // Include other fields as-is
+//     }));
+//   };
   
 
 /**
