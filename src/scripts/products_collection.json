@@ -1,29 +1,210 @@
 [
     {
-      "name": "Samsung Battery EB-BG950ABE 3000 mAh SM-G950 Galaxy S8 GH82-14642A",
-      "brand": "Samsung",
-      "series": "S series",
-      "model": "Samsung Galaxy S8",
-      "description": "Info: Samsung Battery EB-BG950ABE 3000 mAh SM-G950 Galaxy S8 GH82-14642A. Suitable for Samsung Galaxy S8.",
-      "imageUrls": [
-        "https://mpsmobile.de/data/product/images/detail/normal/31FED876-F239-0A7F-9E30-2788C550EFDD.jpg",
-        "https://mpsmobile.de/data/product/images/detail/normal/521850D6-19E9-5262-2665-28E01B402A78.jpg"
-      ],
-      "productType": "Batteries",
-      "price": 10
+        "name": "OEM Display Unit (Wihtout Frame) Huawei P8 lite black",
+        "brand": "Huawei",
+        "series": "P series",
+        "model": "Huawei P8lite",
+        "description": "Info: OEM Display Unit (Wihtout Frame) Huawei P8 lite black\n\nSuitable for:\n\nHuawei P8lite",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/9A5E787B-0BD8-0F63-829F-CA6E374CEE17.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/2ABD93F2-0E89-ACB6-D7FC-B8A359504F14.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.38
     },
     {
-      "name": "Samsung Battery EB-BG955ABE 3500 mAh SM-G955F Galaxy S8+ GH82-14656A",
-      "brand": "Samsung",
-      "series": "S series",
-      "model": "Samsung Galaxy S8+",
-      "description": "Info: Samsung Battery EB-BG955ABE 3500 mAh SM-G955F Galaxy S8+ GH82-14656A. Suitable for Samsung Galaxy S8+.",
-      "imageUrls": [
-        "https://mpsmobile.de/data/product/images/detail/normal/5C52FC42-A7E5-8F44-41DA-1E9810C26FEE.jpg",
-        "https://mpsmobile.de/data/product/images/detail/normal/93DD5F03-55B5-D035-CA9C-BFEB5A62E822.jpg"
-      ],
-      "productType": "Batteries",
-      "price": 20
+        "name": "OEM Display Unit for Huawei P8 white",
+        "brand": "Huawei",
+        "series": "P series",
+        "model": "Huawei P8",
+        "description": "Info: OEM Display Unit for Huawei P8 white\n\nSuitable for:\n\nHuawei P8",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/B65CA842-B8C3-5280-EA8D-CBE951985EFC.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/72D244BC-DF19-7F03-02D1-AB5C3C75266A.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "OEM Display Unit (Wihtout Frame) Huawei P8 black",
+        "brand": "Huawei",
+        "series": "P series",
+        "model": "Huawei P8",
+        "description": "Suitable for:\n\nHuawei P8",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/4729F9C5-D17A-D936-1392-8F4C0EC8E1EA.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/AA97BD24-4BBC-0F27-3F29-5E171AC96AA4.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "OEM Display Unit (Without Frame) Huawei Ascend G6 white",
+        "brand": "Huawei",
+        "series": "Ascend",
+        "model": "Huawei Ascend G6",
+        "description": "Info: OEM Display Unit (Without Frame) Huawei Ascend G6 white\n\nSuitable for:\n\nHuawei Ascend G6",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/40448CE7-E856-4D7D-0CD3-95E8E09FC753.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/77901BCE-ECCF-B004-25EB-C217BC80697D.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "OEM Display Unit + Frame Huawei Ascend G6 black",
+        "brand": "Huawei",
+        "series": "Ascend",
+        "model": "Huawei Ascend G6",
+        "description": "Info: OEM Display Unit + Frame Huawei Ascend G6 black\n\nSuitable for:\n\nHuawei Ascend G6",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/11FF40BF-AFE9-ACF8-22DE-833786DD2260.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/0FD2D5CB-094A-2C07-146D-04F24031CA19.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "OEM Display Unit + Frame Huawei Ascend G6 white",
+        "brand": "Huawei",
+        "series": "Ascend",
+        "model": "Huawei Ascend G6",
+        "description": "Suitable for:\n\nHuawei Ascend G6",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/77A52F65-60C0-AE66-C4FC-5ADD08C75E89.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/CEC45516-A2FE-1D95-636A-8AB5BCA1582E.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "OEM Display Unit (Wihtout Frame) Huawei Ascend P6 white",
+        "brand": "Huawei",
+        "series": "Ascend",
+        "model": "Huawei Ascend P6",
+        "description": "Suitable for:\n\nHuawei Ascend P6",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/small/79B69D78-821A-7D09-BAA5-FFAA6299C446.jpg",
+            "https://mpsmobile.de/data/product/images/detail/small/7A244057-9D7B-601B-CD60-3D3013CA4D5C.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "OEM Display Unit (Wihtout Frame) Huawei Ascend G7 black",
+        "brand": "Huawei",
+        "series": "Ascend",
+        "model": "Huawei Ascend G7",
+        "description": "Suitable for:\n\nHuawei Ascend G7",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/CB11B712-B82B-4D9C-D33B-6B9C349A9B80.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/3236E2E5-7B6E-830E-7E3F-5ACA5655246A.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "OEM Display Unit (Wihtout Frame) Huawei Ascend G7 white",
+        "brand": "Huawei",
+        "series": "Ascend",
+        "model": "Huawei Ascend G7",
+        "description": "Info: OEM Display Unit (Wihtout Frame) Huawei Ascend G7 white\n\nSuitable for:\n\nHuawei Ascend G7",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/E54CD0CF-3592-57BD-316B-CF1BE5A1D8A6.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/710CB164-6632-34BE-06A0-B29604A368BD.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "OEM Display Unit + Frame Huawei Ascend G7 black",
+        "brand": "Huawei",
+        "series": "Ascend",
+        "model": "Huawei Ascend G7",
+        "description": "Suitable for:\n\nHuawei Ascend G7",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/6AA51AF4-009F-354E-7827-1B57BEE2FEBD.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/9F525931-EA45-F8D7-D550-0695EC9D3435.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 10.84
+    },
+    {
+        "name": "OEM Display Unit + Frame for Huawei Ascend P8 white",
+        "brand": "Huawei",
+        "series": "P series",
+        "model": "Huawei P8",
+        "description": "Info: OEM Display Unit + Frame for Huawei Ascend P8 white\n\nSuitable for:\n\nHuawei P8",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/ED73A165-362B-AE20-4717-75B03CE9CCD9.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/6206E89D-F889-6894-96F2-D3F8B51A065A.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "OEM Display Unit + Frame for Huawei P8 black",
+        "brand": "Huawei",
+        "series": "P series",
+        "model": "Huawei P8",
+        "description": "Info: OEM Display Unit + Frame for Huawei P8 black\n\nSuitable for:\n\nHuawei P8",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/59A96FF4-986E-7782-A86D-5691214B5874.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/0A2216E8-932E-C004-6FFB-93CC4FFE9543.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "Huawei Ascend G7 LCD  with frame white",
+        "brand": "Huawei",
+        "series": "Ascend",
+        "model": "Huawei Ascend G7",
+        "description": "Technical Data:- IPS LCD capacitive touchscreen, 16M colors- 5.5 inches, 83.4 cm2 (~70.3% screen-to-body ratio)- 720 x 1280 pixels, 16:9 ratio (~267 ppi density)Similar product as in the video:<br>\n\nSuitable for:\n\nHuawei Ascend G7",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/7F6EE4BA-F1C0-69E2-A857-63C14A208833.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/A2EE6F1E-1313-7E96-D9E3-BE2572852945.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 6.9
+    },
+    {
+        "name": "OEM Display Unit for Huawei Mate 8 gold",
+        "brand": "Huawei",
+        "series": "Mate",
+        "model": "Huawei Mate 8",
+        "description": "Info: OEM Display Unit for Huawei Mate 8 gold\n\nSuitable for:\n\nHuawei Mate 8",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/small/8EF7BC81-50E2-BCF4-0D7E-3B7F222208EC.jpg",
+            "https://mpsmobile.de/data/product/images/detail/small/031E6914-ED39-2E40-989B-1BAB0AA76662.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 4.47
+    },
+    {
+        "name": "OEM Display Unit for Huawei Mate 7 gold",
+        "brand": "Huawei",
+        "series": "Ascend",
+        "model": "Huawei Ascend Mate7",
+        "description": "Info: OEM Display Unit for Huawei Mate 7 gold\n\nSuitable for:\n\nHuawei Ascend Mate7",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/small/8F624CF1-BDD3-7926-7076-B788568C894C.jpg",
+            "https://mpsmobile.de/data/product/images/detail/small/713D220D-D843-B250-853C-75EC01A91DD5.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 9.5
+    },
+    {
+        "name": "OEM Display for Huawei Mate 7 white",
+        "brand": "Huawei",
+        "series": "Ascend",
+        "model": "Huawei Ascend Mate7",
+        "description": "Info: OEM Display for Huawei Mate 7 white\n\nSuitable for:\n\nHuawei Ascend Mate7",
+        "imageUrls": [
+            "https://mpsmobile.de/data/product/images/detail/normal/6F8D9DA6-C372-7DEA-FBFB-05130CA7BAC6.jpg",
+            "https://mpsmobile.de/data/product/images/detail/normal/0A2FF57E-59C0-CDB4-5CF8-0C5F0AA53172.jpg"
+        ],
+        "productType": "LCD Display",
+        "price": 9.5
     }
-  ]
-  
+]

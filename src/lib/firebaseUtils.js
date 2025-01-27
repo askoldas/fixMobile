@@ -1,5 +1,31 @@
-import { collection, addDoc, updateDoc, deleteDoc, getDocs, doc } from "firebase/firestore";
+import { collection, addDoc, updateDoc, deleteDoc, getDocs, query, where, orderBy, limit, startAfter, doc } from "firebase/firestore";
 import { db } from "./firebase"; // Import your Firebase config
+
+/**
+ * Validate and normalize Firestore documents.
+ * @param {Array} documents - The array of documents to validate.
+ * @returns {Array} Validated and normalized documents.
+ */
+// const validateDocuments = (documents) => {
+//   return documents.map((doc) => ({
+//     id: doc.id || "",
+//     name: doc.name || "Unnamed Product",
+//     price: doc.price || 0, // Default price to 0
+//     description: doc.description || "",
+//     categoryId: doc.categoryId || "unknown",
+//     productTypeId: doc.productTypeId || "unknown",
+//     imageUrls: Array.isArray(doc.imageUrls) ? doc.imageUrls : [], // Ensure it's an array
+//   }));
+// };
+const validateDocuments = (documents) => {
+    return documents.map((doc) => ({
+      id: doc.id || "",
+      name: doc.name || "Unnamed Product Type", // Ensure a default name
+      parent: doc.parent || null, // Allow null or parent ID
+      ...doc, // Include other fields as-is
+    }));
+  };
+  
 
 /**
  * Add a document to a collection.
@@ -58,15 +84,52 @@ export const deleteDocument = async (collectionName, id) => {
 /**
  * Fetch all documents from a collection.
  * @param {string} collectionName - The name of the collection.
- * @returns {Array} An array of documents.
+ * @returns {Array} An array of validated and normalized documents.
  */
 export const fetchDocuments = async (collectionName) => {
   if (!collectionName) throw new Error("Collection name is required.");
   try {
     const querySnapshot = await getDocs(collection(db, collectionName));
-    return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const docs = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    return validateDocuments(docs); // Validate documents before returning
   } catch (error) {
     console.error(`Error fetching documents from ${collectionName}:`, error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch paginated documents from a collection.
+ * @param {string} collectionName - Firestore collection name.
+ * @param {Object} filters - Filters like { field: "brand", value: "Huawei" }.
+ * @param {number} pageSize - Number of documents per page.
+ * @param {Object} lastDoc - The last document snapshot (optional).
+ * @returns {Object} { docs, lastVisible } - Fetched documents and the last visible document.
+ */
+export const fetchPaginatedDocuments = async (collectionName, filters, pageSize, lastDoc = null) => {
+  if (!collectionName) throw new Error("Collection name is required.");
+  try {
+    const collectionRef = collection(db, collectionName);
+
+    // Build query constraints
+    const constraints = Object.entries(filters).map(([field, value]) => where(field, "==", value));
+    constraints.push(orderBy("price", "asc")); // Example sorting by price
+    constraints.push(limit(pageSize)); // Limit the number of documents per page
+
+    if (lastDoc) {
+      constraints.push(startAfter(lastDoc));
+    }
+
+    const q = query(collectionRef, ...constraints);
+    const querySnapshot = await getDocs(q);
+
+    // Map Firestore documents to a usable format
+    const docs = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    const lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+
+    return { docs: validateDocuments(docs), lastVisible }; // Validate documents before returning
+  } catch (error) {
+    console.error(`Error fetching paginated documents from ${collectionName}:`, error);
     throw error;
   }
 };
