@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import Button from "@/global/components/Button";
+import UserControls from "@/global/components/UserControls"; // Import UserControls
 import styles from "@/global/styles/Header.module.scss";
 
 export default function Header() {
@@ -10,21 +10,34 @@ export default function Header() {
             <div className={styles.container}>
                 {/* Logo */}
                 <Link href="/" className={styles.logo}>
-                    <Image src="/fixmobile_logo.svg" alt="FixMobile Logo" width={120} height={40} />
+                    <Image src="/fixmobile_logo.svg" alt="FixMobile Logo" width={120} height={40} priority/>
                 </Link>
-
 
                 {/* Navigation Links */}
                 <nav className={styles.nav}>
-                    <Link href="/" className={styles.navLink}>Home</Link>
-                    <Link href="/about" className={styles.navLink}>About</Link>
-                    <Link href="/services" className={styles.navLink}>Services</Link>
-                    <Link href="/works" className={styles.navLink}>Works</Link>
+                    {/* External link for Serviss (opens in new tab) */}
+                    <a href="https://serviss.fixmobile.lv/" className={styles.navLink} target="_blank" rel="noopener noreferrer">
+                        Serviss
+                    </a>
+
+                    {/* Internal Next.js Links */}
+                    <Link href="/shop" className={styles.navLink}>Shop</Link>
+
+                    {/* External Links for About & Contacts */}
+                    {/* <a href="https://serviss.fixmobile.lv/about/" className={styles.navLink} target="_blank" rel="noopener noreferrer">
+                        About
+                    </a>
+                    <a href="https://serviss.fixmobile.lv/contact/" className={styles.navLink} target="_blank" rel="noopener noreferrer">
+                        Contacts
+                    </a> */}
+
+                    {/* Admin Panel Link */}
+                    <Link href="/admin" className={styles.navLink}>Admin</Link>
                 </nav>
 
 
-                {/* Call-to-Action Button */}
-                <Button variant="primary">Contact Us</Button>
+                {/* User Controls (Contact Us, Cart, User) */}
+                <UserControls />
             </div>
         </header>
     );
