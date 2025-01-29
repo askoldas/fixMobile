@@ -1,0 +1,71 @@
+// ==================================
+// SCSS Variables for FixMobile
+// ==================================
+
+@use "sass:color";
+
+// Primary Action Color
+$primary-color: #FF6F00;
+$primary-color-hover: color.adjust($primary-color, $lightness: -10%);
+$primary-color-active: color.adjust($primary-color, $lightness: -15%);
+
+// Neutral Colors
+$secondary-color: #000000;   // High contrast elements
+$secondary-color-hover: color.adjust($secondary-color, $lightness: 20%);
+$accent-color: #5C6B73;      // Accents and borders
+
+// Grayscales
+$light-gray: #E0E0E2;        // Light backgrounds, dividers
+$lighter-gray: #F2F2F2;      // Subtle backgrounds, disabled states
+
+// Base Colors
+$white: #FFFFFF;             // Backgrounds, text
+
+// Text Colors
+$text-color: $secondary-color;        // Default text
+$muted-text-color: $accent-color;     // Less emphasized text
+
+// Background Colors
+$background-color: $lighter-gray;     // Page background
+$card-background: $white;             // Card or container backgrounds
+
+// Spacing & Layout
+$spacing-xxs: 4px;
+$spacing-xs: 8px;
+$spacing-sm: 12px;
+$spacing-m: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 40px;
+$spacing-xxxl: 48px;
+$spacing-xxxxl: 64px;
+
+// Typography
+$font-family-headings: 'Montserrat', sans-serif;
+$font-family-body: 'Inter', sans-serif;
+
+$font-size-base: 1rem; // 16px
+$font-size-sm: 0.667rem; // 10.67px
+$font-size-md: 1.5rem; // 24px
+$font-size-lg: 2.25rem; // 36px
+$font-size-xl: 3.375rem; // 54px
+$font-size-xxl: 5.063rem; // 81px
+$font-size-xxxl: 7.594rem; // 121.5px
+$line-height-base: 1.5;
+
+// Font Weights
+$font-weight-regular: 400;
+$font-weight-medium: 500;
+$font-weight-bold: 700;
+
+// Dimentions
+
+$button-border-radius: 999px; // Fully rounded buttons
+
+// Breakpoints for Responsive Design
+$breakpoint-sm: 640px;
+$breakpoint-m: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+
