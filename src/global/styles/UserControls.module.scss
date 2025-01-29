@@ -1,0 +1,10 @@
+@use "@/global/styles/variables" as *;
+
+.userControls {
+    display: flex;
+    align-items: center;
+    gap: $spacing-m; // Proper spacing between buttons
+  }
+
+
+  

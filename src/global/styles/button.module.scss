@@ -1,0 +1,58 @@
+@use "@/global/styles/variables" as *;
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: $button-border-radius;
+  font-weight: $font-weight-bold;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  border: 2px solid transparent;
+
+  // Small Button
+  &--s {
+    font-size: 0.75rem;
+    padding: $spacing-xs $spacing-m;
+  }
+
+  // Medium Button (Default)
+  &--m {
+    font-size: 1rem;
+    padding: $spacing-sm $spacing-lg;
+  }
+
+  // Large Button
+  &--l {
+    font-size: 1.25rem;
+    padding: $spacing-m $spacing-xl;
+  }
+
+  // Primary Button
+  &--primary {
+    background-color: $primary-color;
+    color: $white;
+
+    &:hover {
+      background-color: $primary-color-hover;
+    }
+  }
+
+  // Secondary Button
+  &--secondary {
+    background-color: transparent;
+    color: $white;
+    border-color: $white;
+
+    &:hover {
+      background-color: $secondary-color-hover;
+    }
+  }
+
+  // Disabled Button
+  &--disabled {
+    background-color: $light-gray;
+    color: $muted-text-color;
+    cursor: not-allowed;
+  }
+}

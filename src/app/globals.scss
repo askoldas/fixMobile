@@ -1,0 +1,110 @@
+@use "@/global/styles/variables" as *;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+ul, ol {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+}
+
+body {
+  background-color: $background-color;
+  color: $text-color;
+  font-family: $font-family-body;
+  font-size: $font-size-base;
+  line-height: $line-height-base;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family-headings;
+  margin-bottom: $spacing-sm;
+}
+
+p {
+  margin-bottom: $spacing-m;
+}
+
+button {
+  font-family: inherit;
+  font-size: $font-size-base;
+}
+
+code, pre {
+  font-family: $font-family-body;
+  font-size: $font-size-sm;
+  background-color: $lighter-gray;
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $spacing-xs;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: $light-gray;
+  margin: $spacing-m 0;
+}
+
+.spacing {
+  margin: $spacing-sm 0;
+}
+
+.spacing-lg {
+  margin: $spacing-lg 0;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.flex-column {
+    flex-direction: column;
+  }
+
+  &.flex-between {
+    justify-content: space-between;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: $secondary-color;
+    color: $white;
+  }
+
+  code, pre {
+    background-color: darken($lighter-gray, 10%);
+  }
+}
