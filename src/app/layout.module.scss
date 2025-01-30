@@ -1,0 +1,25 @@
+@use "@/global/styles/variables" as *;
+
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden; // Prevents scrolling on the body
+    height: 100vh; // Ensures full viewport height
+    display: flex;
+    flex-direction: column;
+}
+
+.layoutContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100vh; // Ensures full viewport height
+    overflow: hidden; // Prevents body scrolling
+}
+
+.mainContent {
+    flex-grow: 1; // Allows content to take up remaining space
+    margin-top: 80px; // Pushes content below fixed header
+    overflow-y: auto; // Ensures only main content is scrollable
+    display: flex;
+    flex-direction: column;
+}

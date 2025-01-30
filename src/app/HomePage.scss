@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: calc(100vh - 80px); // Adjusted to prevent extra scroll
   background-color: $secondary-color;
   position: relative;
   background-image: url('/images/hero_phone.webp');
