@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchProducts,
@@ -23,21 +23,22 @@ export default function ProductsManager() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  // Fetch products, categories, and product types on mount
-  useEffect(() => {
-    dispatch(fetchProducts());
-    dispatch(fetchCategories());
-    fetchProductTypes();
-  }, [dispatch]);
-
-  const fetchProductTypes = async () => {
+  // Memoized fetchProductTypes function to prevent unnecessary re-fetching
+  const fetchProductTypes = useCallback(async () => {
     try {
       const types = await fetchDocuments("ProductTypes");
       setProductTypes(types);
     } catch (err) {
       console.error("Error fetching product types:", err);
     }
-  };
+  }, []);
+
+  // Fetch products, categories, and product types on mount
+  useEffect(() => {
+    dispatch(fetchProducts());
+    dispatch(fetchCategories());
+    fetchProductTypes();
+  }, [dispatch, fetchProductTypes]);
 
   const handleDeleteProduct = (id) => {
     if (window.confirm("Are you sure you want to delete this product?")) {
