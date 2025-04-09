@@ -1,9 +1,17 @@
 import React, { useState } from "react";
-import { useCategories } from "@/hooks/useCategories"; // Import the custom hook
-import styles from "./styles/categories-manager.module.scss"; // Import the SCSS module
+import { useDevices } from "@/hooks/useDevices"; // switch to useDevices hook
+import styles from "./styles/categories-manager.module.scss";
 
 export default function CategoriesManager() {
-  const { categories, loading, error, addCategory, updateCategory, deleteCategory } = useCategories();
+  const {
+    devices: categories, // alias devices to categories so rest of the code stays unchanged
+    loading,
+    error,
+    addDevice: addCategory,
+    updateDevice: updateCategory,
+    deleteDevice: deleteCategory,
+  } = useDevices();
+
   const [expandedCategories, setExpandedCategories] = useState({});
 
   const handleAddEntry = async (name, type, parent = "") => {
@@ -59,15 +67,21 @@ export default function CategoriesManager() {
     <ul className={styles["categories-list"]}>
       {categories.map((category) => (
         <li key={category.id} className={styles["category-item"]}>
-          <div className={styles["category-details"]} onClick={() => toggleExpand(category.id)}>
-            <span>{category.name} ({category.type})</span>
+          <div
+            className={styles["category-details"]}
+            onClick={() => toggleExpand(category.id)}
+          >
+            <span>
+              {category.name} ({category.type})
+            </span>
             <span className={styles["category-actions"]}>
               <button
                 className={styles["edit-button"]}
                 onClick={(e) => {
                   e.stopPropagation();
                   const newName = prompt("Enter new name", category.name);
-                  if (newName) handleUpdateEntry(category.id, { name: newName });
+                  if (newName)
+                    handleUpdateEntry(category.id, { name: newName });
                 }}
               >
                 Edit
@@ -76,7 +90,9 @@ export default function CategoriesManager() {
                 className={styles["delete-button"]}
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (window.confirm("Are you sure you want to delete this entry?")) {
+                  if (
+                    window.confirm("Are you sure you want to delete this entry?")
+                  ) {
                     handleDeleteEntry(category.id);
                   }
                 }}
@@ -85,11 +101,12 @@ export default function CategoriesManager() {
               </button>
             </span>
           </div>
-          {expandedCategories[category.id] && category.children.length > 0 && (
-            <div className={styles["nested-categories"]}>
-              {renderCategories(category.children)}
-            </div>
-          )}
+          {expandedCategories[category.id] &&
+            category.children.length > 0 && (
+              <div className={styles["nested-categories"]}>
+                {renderCategories(category.children)}
+              </div>
+            )}
           {expandedCategories[category.id] && category.type === "brand" && (
             <div className={styles["add-child-container"]}>
               <button
@@ -138,7 +155,11 @@ export default function CategoriesManager() {
       >
         Add New Brand
       </button>
-      {loading ? <p className={styles["loading"]}>Loading...</p> : renderCategories(buildNestedStructure())}
+      {loading ? (
+        <p className={styles["loading"]}>Loading...</p>
+      ) : (
+        renderCategories(buildNestedStructure())
+      )}
       {error && <p className={styles["error-message"]}>{error}</p>}
     </div>
   );
