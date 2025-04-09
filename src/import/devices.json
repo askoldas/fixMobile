@@ -1,0 +1,1010 @@
+[
+  {
+    "id": "iphone",
+    "name": "iPhone",
+    "type": "brand",
+    "parent": null
+  },
+  {
+    "id": "11_series",
+    "name": "11 Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_11",
+    "name": "iPhone 11",
+    "type": "model",
+    "parent": "11_series"
+  },
+  {
+    "id": "iphone_11_pro",
+    "name": "iPhone 11 Pro",
+    "type": "model",
+    "parent": "11_series"
+  },
+  {
+    "id": "iphone_11_pro_max",
+    "name": "iPhone 11 Pro Max",
+    "type": "model",
+    "parent": "11_series"
+  },
+  {
+    "id": "ipad",
+    "name": "iPad",
+    "type": "brand",
+    "parent": null
+  },
+  {
+    "id": "ipad_air",
+    "name": "iPad Air",
+    "type": "series",
+    "parent": "ipad"
+  },
+  {
+    "id": "ipad_2_wi-fiipad_2_wi-fi3gipad_2_cdma",
+    "name": "iPad 2 Wi-Fi,iPad 2 Wi-Fi+3G,iPad 2 CDMA",
+    "type": "model",
+    "parent": "ipad"
+  },
+  {
+    "id": "ipad_air_2ipad_mini_4_2015ipad_pro_129_2015ipad_97_2017ipad_97_2018ipad_mini_2019ipad_air_2019ipad_102_2019ipad_102_2020ipad_102_2021",
+    "name": "iPad Air 2,iPad mini 4 (2015),iPad Pro 12.9 (2015),iPad 9.7 (2017),iPad 9.7 (2018),iPad mini (2019),iPad Air (2019),iPad 10.2 (2019),iPad 10.2 (2020),iPad 10.2 (2021)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_mini",
+    "name": "iPad mini",
+    "type": "series",
+    "parent": "ipad"
+  },
+  {
+    "id": "ipad_mini_wi-fi_cellularipad_mini_wi-fiipad_mini_2ipad_airipad_mini_3",
+    "name": "iPad mini Wi-Fi + Cellular,iPad mini Wi-Fi,iPad mini 2,iPad Air,iPad mini 3",
+    "type": "model",
+    "parent": "ipad_mini"
+  },
+  {
+    "id": "ipad_pro",
+    "name": "iPad Pro",
+    "type": "series",
+    "parent": "ipad"
+  },
+  {
+    "id": "ipad_pro_105_2017ipad_pro_129_2017",
+    "name": "iPad Pro 10.5 (2017),iPad Pro 12.9 (2017)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_11_2018ipad_pro_129_2018ipad_air_2020ipad_mini_2021ipad_air_2022ipad_2022",
+    "name": "iPad Pro 11 (2018),iPad Pro 12.9 (2018),iPad Air (2020),iPad mini (2021),iPad Air (2022),iPad (2022)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_129_2020ipad_pro_11_2020ipad_pro_129_2021ipad_pro_11_2021ipad_pro_129_2022ipad_pro_11_2022",
+    "name": "iPad Pro 12.9 (2020),iPad Pro 11 (2020),iPad Pro 12.9 (2021),iPad Pro 11 (2021),iPad Pro 12.9 (2022),iPad Pro 11 (2022)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "iphone_11_pro_maxiphone_11_pro",
+    "name": "iPhone 11 Pro Max,iPhone 11 Pro",
+    "type": "model",
+    "parent": "11_series"
+  },
+  {
+    "id": "12_series",
+    "name": "12 Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_12",
+    "name": "iPhone 12",
+    "type": "model",
+    "parent": "12_series"
+  },
+  {
+    "id": "iphone_12_mini",
+    "name": "iPhone 12 mini",
+    "type": "model",
+    "parent": "12_series"
+  },
+  {
+    "id": "iphone_12_pro",
+    "name": "iPhone 12 Pro",
+    "type": "model",
+    "parent": "12_series"
+  },
+  {
+    "id": "iphone_12_pro_max",
+    "name": "iPhone 12 Pro Max",
+    "type": "model",
+    "parent": "12_series"
+  },
+  {
+    "id": "13_series",
+    "name": "13 Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_13",
+    "name": "iPhone 13",
+    "type": "model",
+    "parent": "13_series"
+  },
+  {
+    "id": "iphone_13_mini",
+    "name": "iPhone 13 mini",
+    "type": "model",
+    "parent": "13_series"
+  },
+  {
+    "id": "iphone_13_pro_maxiphone_13_pro",
+    "name": "iPhone 13 Pro Max,iPhone 13 Pro",
+    "type": "model",
+    "parent": "13_series"
+  },
+  {
+    "id": "14_series",
+    "name": "14 Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_14",
+    "name": "iPhone 14",
+    "type": "model",
+    "parent": "14_series"
+  },
+  {
+    "id": "iphone_14_plus",
+    "name": "iPhone 14 Plus",
+    "type": "model",
+    "parent": "14_series"
+  },
+  {
+    "id": "iphone_14_pro",
+    "name": "iPhone 14 Pro",
+    "type": "model",
+    "parent": "14_series"
+  },
+  {
+    "id": "iphone_14_pro_max",
+    "name": "iPhone 14 Pro Max",
+    "type": "model",
+    "parent": "14_series"
+  },
+  {
+    "id": "15_series",
+    "name": "15 Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_15",
+    "name": "iPhone 15",
+    "type": "model",
+    "parent": "15_series"
+  },
+  {
+    "id": "iphone_15_plus",
+    "name": "iPhone 15 Plus",
+    "type": "model",
+    "parent": "15_series"
+  },
+  {
+    "id": "iphone_15_pro",
+    "name": "iPhone 15 Pro",
+    "type": "model",
+    "parent": "15_series"
+  },
+  {
+    "id": "iphone_15_pro_max",
+    "name": "iPhone 15 Pro Max",
+    "type": "model",
+    "parent": "15_series"
+  },
+  {
+    "id": "6_series",
+    "name": "6 Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_6",
+    "name": "iPhone 6",
+    "type": "model",
+    "parent": "6_series"
+  },
+  {
+    "id": "iphone_6_plus",
+    "name": "iPhone 6 Plus",
+    "type": "model",
+    "parent": "6_series"
+  },
+  {
+    "id": "iphone_6s",
+    "name": "iPhone 6s",
+    "type": "model",
+    "parent": "6_series"
+  },
+  {
+    "id": "8_series",
+    "name": "8 Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_8",
+    "name": "iPhone 8",
+    "type": "model",
+    "parent": "8_series"
+  },
+  {
+    "id": "se_series",
+    "name": "SE Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_se",
+    "name": "iPhone SE",
+    "type": "model",
+    "parent": "se_series"
+  },
+  {
+    "id": "iphone_se_2020iphone_se_2022",
+    "name": "iPhone SE (2020),iPhone SE (2022)",
+    "type": "model",
+    "parent": "se_series"
+  },
+  {
+    "id": "x_series",
+    "name": "X Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_x",
+    "name": "iPhone X",
+    "type": "model",
+    "parent": "x_series"
+  },
+  {
+    "id": "iphone_xr",
+    "name": "iPhone XR",
+    "type": "model",
+    "parent": "x_series"
+  },
+  {
+    "id": "iphone_xsiphone_xs_max",
+    "name": "iPhone XSiPhone XS Max",
+    "type": "model",
+    "parent": "x_series"
+  },
+  {
+    "id": "iphone_8_plus",
+    "name": "iPhone 8 Plus",
+    "type": "model",
+    "parent": "8_series"
+  },
+  {
+    "id": "iphone_xs",
+    "name": "iPhone XS",
+    "type": "model",
+    "parent": "x_series"
+  },
+  {
+    "id": "iphone_xs_max",
+    "name": "iPhone XS Max",
+    "type": "model",
+    "parent": "x_series"
+  },
+  {
+    "id": "ipad_10_2022_air_4_2020_air_5_2022",
+    "name": "iPad 10 (2022), Air 4 (2020), Air 5 (2022)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_3_4",
+    "name": "iPad 3, 4",
+    "type": "model",
+    "parent": "ipad"
+  },
+  {
+    "id": "ipad_air_2",
+    "name": "iPad Air 2",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_airipad_97_2017_97_2018102_2019102_2020102_2021",
+    "name": "iPad Air,iPad 9.7 (2017), 9.7 (2018),10.2 (2019),10.2 (2020),10.2 (2021)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_mini_2019",
+    "name": "iPad mini (2019)",
+    "type": "model",
+    "parent": "ipad_mini"
+  },
+  {
+    "id": "ipad_mini_2_mini_3",
+    "name": "iPad mini 2, mini 3",
+    "type": "model",
+    "parent": "ipad_mini"
+  },
+  {
+    "id": "ipad_mini_4_2015",
+    "name": "iPad mini 4 (2015)",
+    "type": "model",
+    "parent": "ipad_mini"
+  },
+  {
+    "id": "ipad_mini_6_2021",
+    "name": "iPad mini 6 (2021)",
+    "type": "model",
+    "parent": "ipad_mini"
+  },
+  {
+    "id": "ipad_pro_105_2017",
+    "name": "iPad Pro 10.5 (2017)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_11_2018",
+    "name": "iPad Pro 11 (2018)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_11_2020",
+    "name": "iPad Pro 11 (2020)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_11_2021_pro_11_2022",
+    "name": "iPad Pro 11 (2021), Pro 11 (2022)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_129_2015",
+    "name": "iPad Pro 12.9 (2015)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_129_2017",
+    "name": "iPad Pro 12.9 (2017)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_129_2018_pro_129_2020",
+    "name": "iPad Pro 12.9 (2018), Pro 12.9 (2020)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_129_2021_pro_129_2022",
+    "name": "iPad Pro 12.9 (2021), Pro 12.9 (2022)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_97_2016",
+    "name": "iPad Pro 9.7 (2016)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "iphone_12_12_pro",
+    "name": "iPhone 12, 12 Pro",
+    "type": "model",
+    "parent": "12_series"
+  },
+  {
+    "id": "iphone_13_pro",
+    "name": "iPhone 13 Pro",
+    "type": "model",
+    "parent": "13_series"
+  },
+  {
+    "id": "iphone_13_pro_max",
+    "name": "iPhone 13 Pro Max",
+    "type": "model",
+    "parent": "13_series"
+  },
+  {
+    "id": "5_series",
+    "name": "5 Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_5",
+    "name": "iPhone 5",
+    "type": "model",
+    "parent": "5_series"
+  },
+  {
+    "id": "iphone_5s",
+    "name": "iPhone 5s",
+    "type": "model",
+    "parent": "5_series"
+  },
+  {
+    "id": "iphone_6s_plus",
+    "name": "iPhone 6s Plus",
+    "type": "model",
+    "parent": "6_series"
+  },
+  {
+    "id": "7_series",
+    "name": "7 Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_7",
+    "name": "iPhone 7",
+    "type": "model",
+    "parent": "7_series"
+  },
+  {
+    "id": "iphone_7_plus",
+    "name": "iPhone 7 Plus",
+    "type": "model",
+    "parent": "7_series"
+  },
+  {
+    "id": "iphone_se_2020",
+    "name": "iPhone SE (2020)",
+    "type": "model",
+    "parent": "se_series"
+  },
+  {
+    "id": "iphone_se_2022",
+    "name": "iPhone SE (2022)",
+    "type": "model",
+    "parent": "se_series"
+  },
+  {
+    "id": "macbook",
+    "name": "MacBook",
+    "type": "brand",
+    "parent": null
+  },
+  {
+    "id": "air",
+    "name": "Air",
+    "type": "series",
+    "parent": "macbook"
+  },
+  {
+    "id": "macbook_air_116_a1370",
+    "name": "MacBook Air 11.6\" A1370",
+    "type": "model",
+    "parent": "air"
+  },
+  {
+    "id": "macbook_air_116_a1370_a1465",
+    "name": "MacBook Air 11.6\" A1370, A1465",
+    "type": "model",
+    "parent": "air"
+  },
+  {
+    "id": "macbook_air_133_a1369_a1466",
+    "name": "MacBook Air 13.3\" A1369, A1466",
+    "type": "model",
+    "parent": "air"
+  },
+  {
+    "id": "macbook_air_133_a1932_a2179",
+    "name": "MacBook Air 13.3\" A1932, A2179",
+    "type": "model",
+    "parent": "air"
+  },
+  {
+    "id": "macbook_air_133_m1_a2337",
+    "name": "MacBook Air 13.3\" M1 A2337",
+    "type": "model",
+    "parent": "air"
+  },
+  {
+    "id": "macbook_air_133_m2_a2681",
+    "name": "MacBook Air 13.3\" M2 A2681",
+    "type": "model",
+    "parent": "air"
+  },
+  {
+    "id": "pro",
+    "name": "Pro",
+    "type": "series",
+    "parent": "macbook"
+  },
+  {
+    "id": "macbook_pro_133_a1278",
+    "name": "MacBook Pro 13.3\" A1278",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_133_a1706",
+    "name": "MacBook Pro 13.3\" A1706",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_133_a1708",
+    "name": "MacBook Pro 13.3\" A1708",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_133_a2289_a2159_a2338",
+    "name": "MacBook Pro 13.3\" A2289,  A2159, A2338",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_14_2021_a2442_a2779",
+    "name": "MacBook Pro 14\" 2021 A2442, A2779",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_154_a1286",
+    "name": "MacBook Pro 15.4\" A1286",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_154_a1707",
+    "name": "MacBook Pro 15.4\" A1707",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_16_2019_a2141",
+    "name": "MacBook Pro 16\" 2019 A2141",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_16_2021_a2485_a2780",
+    "name": "MacBook Pro 16\" 2021 A2485, A2780",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_17_a1297",
+    "name": "MacBook Pro 17\" A1297",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_retina_133_a2251_a1989",
+    "name": "MacBook Pro Retina 13.3\" A2251, A1989",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_retina_pro_133_a1502",
+    "name": "MacBook Retina Pro 13.3\" A1502",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_retina_pro_154_a1398_late_2013_mid_2014",
+    "name": "MacBook Retina Pro 15.4\" A1398 Late 2013 Mid 2014",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_retina_pro_154_a1398_mid_2012_early_2013",
+    "name": "MacBook Retina Pro 15.4\" A1398 Mid 2012 Early 2013",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_retina_pro_154_a1398_mid_2015",
+    "name": "MacBook Retina Pro 15.4\" A1398 Mid 2015",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "apple_watch",
+    "name": "Apple Watch",
+    "type": "brand",
+    "parent": null
+  },
+  {
+    "id": "watch_38mm",
+    "name": "Watch 38mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_2_38mm",
+    "name": "Watch Series 2 38mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_2_42mm",
+    "name": "Watch Series 2 42mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_3_38mm",
+    "name": "Watch Series 3 38mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_3_42mm",
+    "name": "Watch Series 3 42mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_4_40mm",
+    "name": "Watch Series 4 40mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_4_44mm",
+    "name": "Watch Series 4 44mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_5_se_se_2022_40mm",
+    "name": "Watch Series 5, SE, SE (2022) 40mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_5_se_se_2022_44mm",
+    "name": "Watch Series 5, SE, SE (2022) 44mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_6_40mm",
+    "name": "Watch Series 6 40mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_6_44mm",
+    "name": "Watch Series 6 44mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_7_41mm",
+    "name": "Watch Series 7 41mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_7_45mm",
+    "name": "Watch Series 7 45mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_8_41mm",
+    "name": "Watch Series 8 41mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_8_45mm",
+    "name": "Watch Series 8 45mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_9_41mm",
+    "name": "Watch Series 9 41mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_series_9_45mm",
+    "name": "Watch Series 9 45mm",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_ultra",
+    "name": "Watch Ultra",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "watch_ultra_2",
+    "name": "Watch Ultra 2",
+    "type": "model",
+    "parent": "apple_watch"
+  },
+  {
+    "id": "iphone_12iphone_12_mini",
+    "name": "iPhone 12,iPhone 12 mini",
+    "type": "model",
+    "parent": "12_series"
+  },
+  {
+    "id": "iphone_13iphone_13_mini",
+    "name": "iPhone 13,iPhone 13 mini",
+    "type": "model",
+    "parent": "13_series"
+  },
+  {
+    "id": "iphone_14iphone_14_plus",
+    "name": "iPhone 14,iPhone 14 Plus",
+    "type": "model",
+    "parent": "14_series"
+  },
+  {
+    "id": "iphone_8iphone_se_2020iphone_se_2022",
+    "name": "iPhone 8,iPhone SE (2020),iPhone SE (2022)",
+    "type": "model",
+    "parent": "8_series"
+  },
+  {
+    "id": "ipad_2022",
+    "name": "iPad (2022)",
+    "type": "model",
+    "parent": "ipad"
+  },
+  {
+    "id": "ipad_102_2019ipad_102_2020ipad_102_2021",
+    "name": "iPad 10.2 (2019),iPad 10.2 (2020),iPad 10.2 (2021)",
+    "type": "model",
+    "parent": "ipad"
+  },
+  {
+    "id": "ipad_3_wi-fi_cellularipad_3_wi-fi",
+    "name": "iPad 3 Wi-Fi + Cellular,iPad 3 Wi-Fi",
+    "type": "model",
+    "parent": "ipad"
+  },
+  {
+    "id": "ipad_air_2019",
+    "name": "iPad Air (2019)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_air_2020ipad_air_2022",
+    "name": "iPad Air (2020),iPad Air (2022)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_airipad_97_2017ipad_97_2018",
+    "name": "iPad Air,iPad 9.7 (2017),iPad 9.7 (2018)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_pro_11_2018ipad_pro_129_2018ipad_pro_129_2020ipad_pro_11_2020",
+    "name": "iPad Pro 11 (2018),iPad Pro 12.9 (2018),iPad Pro 12.9 (2020),iPad Pro 11 (2020)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_129_2021ipad_pro_11_2021ipad_pro_129_2022ipad_pro_11_2022",
+    "name": "iPad Pro 12.9 (2021),iPad Pro 11 (2021),iPad Pro 12.9 (2022),iPad Pro 11 (2022)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "iphone_12_proiphone_12",
+    "name": "iPhone 12 Pro,iPhone 12",
+    "type": "model",
+    "parent": "12_series"
+  },
+  {
+    "id": "ipad_air_3_2019",
+    "name": "iPad Air 3 (2019)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_air_3_2019_refurbished",
+    "name": "iPad Air 3 (2019) Refurbished",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_air_4_2020_air5_2022",
+    "name": "iPad Air 4 (2020), Air5 (2022)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_air_ipad_97_2017ipad_97_2018",
+    "name": "iPad Air, iPad 9.7 (2017),iPad 9.7 (2018)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_mini_5_2019",
+    "name": "iPad mini 5 (2019)",
+    "type": "model",
+    "parent": "ipad_mini"
+  },
+  {
+    "id": "ipad_mini_5_2019_refurbished",
+    "name": "iPad mini 5 (2019) Refurbished",
+    "type": "model",
+    "parent": "ipad_mini"
+  },
+  {
+    "id": "ipad_mini_6_2021_refurbished",
+    "name": "iPad mini 6 (2021) Refurbished",
+    "type": "model",
+    "parent": "ipad_mini"
+  },
+  {
+    "id": "ipad_pro_105_2017_refurbished",
+    "name": "iPad Pro 10.5 (2017) Refurbished",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_11_2018ipad_pro_11_2020",
+    "name": "iPad Pro 11 (2018),iPad Pro 11 (2020)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_11_2021ipad_pro_11_2022_refurbished",
+    "name": "iPad Pro 11 (2021),iPad Pro 11 (2022) Refurbished",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_129_2015_refurbished",
+    "name": "iPad Pro 12.9 (2015) Refurbished",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_129_2017_refurbished",
+    "name": "iPad Pro 12.9 (2017) Refurbished",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_129_2018ipad_pro_129_2020",
+    "name": "iPad Pro 12.9 (2018),iPad Pro 12.9 (2020)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "ipad_pro_129_2021ipad_pro_129_2022",
+    "name": "iPad Pro 12.9 (2021),iPad Pro 12.9 (2022)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "16_series",
+    "name": "16 Series",
+    "type": "series",
+    "parent": "iphone"
+  },
+  {
+    "id": "iphone_16",
+    "name": "iPhone 16",
+    "type": "model",
+    "parent": "16_series"
+  },
+  {
+    "id": "iphone_16_plus",
+    "name": "iPhone 16 Plus",
+    "type": "model",
+    "parent": "16_series"
+  },
+  {
+    "id": "iphone_16_pro",
+    "name": "iPhone 16 Pro",
+    "type": "model",
+    "parent": "16_series"
+  },
+  {
+    "id": "iphone_16_pro_max",
+    "name": "iPhone 16 Pro Max",
+    "type": "model",
+    "parent": "16_series"
+  },
+  {
+    "id": "macbook_pro_133_a2289_a2159_a2251_a1989",
+    "name": "MacBook Pro 13.3\" A2289, A2159, A2251, A1989",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_pro_133_m1_a2338_m2_a2338",
+    "name": "MacBook Pro 13.3\" M1 A2338, M2 A2338",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "macbook_retina_pro_133_a1425",
+    "name": "MacBook Retina Pro 13.3\" A1425",
+    "type": "model",
+    "parent": "pro"
+  },
+  {
+    "id": "iphone_7iphone_8iphone_se_2020iphone_se_2022",
+    "name": "iPhone 7,iPhone 8,iPhone SE (2020),iPhone SE (2022)",
+    "type": "model",
+    "parent": "7_series"
+  },
+  {
+    "id": "ipad_air_2ipad_mini_4_2015ipad_pro_129_2015",
+    "name": "iPad Air 2,iPad mini 4 (2015),iPad Pro 12.9 (2015)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_mini_wi-fi_cellularipad_mini_wi-fiipad_mini_2ipad_airipad_mini_3ipad_97_2017ipad_97_2018ipad_102_2019ipad_102_2020",
+    "name": "iPad mini Wi-Fi + Cellular,iPad mini Wi-Fi,iPad mini 2,iPad Air,iPad mini 3,iPad 9.7 (2017),iPad 9.7 (2018),iPad 10.2 (2019),iPad 10.2 (2020)",
+    "type": "model",
+    "parent": "ipad_mini"
+  },
+  {
+    "id": "ipad_pro_105_2017ipad_pro_129_2017ipad_mini_2019ipad_air_2019",
+    "name": "iPad Pro 10.5 (2017),iPad Pro 12.9 (2017),iPad mini (2019),iPad Air (2019)",
+    "type": "model",
+    "parent": "ipad_pro"
+  },
+  {
+    "id": "iphone_8iphone_se_2020",
+    "name": "iPhone 8,iPhone SE (2020)",
+    "type": "model",
+    "parent": "8_series"
+  },
+  {
+    "id": "ipad_97_2017ipad_97_2018ipad_102_2019ipad_102_2020ipad_102_2021",
+    "name": "iPad 9.7 (2017),iPad 9.7 (2018),iPad 10.2 (2019),iPad 10.2 (2020),iPad 10.2 (2021)",
+    "type": "model",
+    "parent": "ipad"
+  },
+  {
+    "id": "ipad_airipad_97_2017",
+    "name": "iPad AiriPad 9.7 (2017)",
+    "type": "model",
+    "parent": "ipad_air"
+  },
+  {
+    "id": "ipad_2_wi-fi",
+    "name": "iPad 2 Wi-Fi",
+    "type": "model",
+    "parent": "ipad"
+  },
+  {
+    "id": "ipad_3_wi-fiipad_4_wi-fi",
+    "name": "iPad 3 Wi-Fi,iPad 4 Wi-Fi",
+    "type": "model",
+    "parent": "ipad"
+  }
+]
