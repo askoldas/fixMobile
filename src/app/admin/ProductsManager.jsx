@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import Select from "react-select";
 import {
   fetchProducts,
   deleteProduct,
@@ -22,10 +23,10 @@ export default function ProductsManager() {
 
   const [productTypes, setProductTypes] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [selectedType, setSelectedType] = useState("");
-  const [selectedBrand, setSelectedBrand] = useState("");
-  const [selectedSeries, setSelectedSeries] = useState("");
-  const [selectedModel, setSelectedModel] = useState("");
+  const [selectedType, setSelectedType] = useState(null);
+  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedSeries, setSelectedSeries] = useState(null);
+  const [selectedModel, setSelectedModel] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
@@ -49,18 +50,19 @@ export default function ProductsManager() {
 
     if (selectedType) {
       filtered = filtered.filter(
-        (product) => product.productTypeId === selectedType
+        (product) => product.productTypeId === selectedType.value
       );
     }
 
     if (selectedModel) {
       filtered = filtered.filter(
         (product) =>
-          Array.isArray(product.modelIds) && product.modelIds.includes(selectedModel)
+          Array.isArray(product.modelIds) &&
+          product.modelIds.includes(selectedModel.value)
       );
     } else if (selectedSeries) {
       const models = categories
-        .filter((cat) => cat.type === "model" && cat.parent === selectedSeries)
+        .filter((cat) => cat.type === "model" && cat.parent === selectedSeries.value)
         .map((m) => m.id);
       filtered = filtered.filter(
         (product) =>
@@ -69,7 +71,7 @@ export default function ProductsManager() {
       );
     } else if (selectedBrand) {
       const series = categories
-        .filter((cat) => cat.type === "series" && cat.parent === selectedBrand)
+        .filter((cat) => cat.type === "series" && cat.parent === selectedBrand.value)
         .map((s) => s.id);
       const models = categories
         .filter((cat) => cat.type === "model" && series.includes(cat.parent))
@@ -84,58 +86,76 @@ export default function ProductsManager() {
     setFilteredProducts(filtered);
   }, [products, selectedType, selectedBrand, selectedSeries, selectedModel, categories]);
 
+  const brandOptions = categories
+    .filter((cat) => cat.type === "brand")
+    .map((brand) => ({ value: brand.id, label: brand.name }));
+
+  const seriesOptions = categories
+    .filter((cat) => cat.type === "series" && (!selectedBrand || cat.parent === selectedBrand.value))
+    .map((ser) => ({ value: ser.id, label: ser.name }));
+
+  const modelOptions = categories
+    .filter((cat) => {
+      if (cat.type !== "model") return false;
+      if (selectedSeries) return cat.parent === selectedSeries.value;
+      if (selectedBrand) {
+        const seriesUnderBrand = categories
+          .filter((ser) => ser.type === "series" && ser.parent === selectedBrand.value)
+          .map((ser) => ser.id);
+        return seriesUnderBrand.includes(cat.parent);
+      }
+      return true; // no brand or series selected
+    })
+    .map((mod) => ({ value: mod.id, label: mod.name }));
+
+  const typeOptions = productTypes.map((type) => ({ value: type.id, label: type.name }));
+
   return (
     <div className={styles["manager-container"]}>
       <h2>Products</h2>
       {error && <p className={styles["error-message"]}>{error}</p>}
       <div className={styles["top-section"]}>
         <div className={styles["filters"]}>
-          <select value={selectedType} onChange={(e) => setSelectedType(e.target.value)}>
-            <option value="">All Types</option>
-            {productTypes.map((type) => (
-              <option key={type.id} value={type.id}>{type.name}</option>
-            ))}
-          </select>
-          <select
+          <Select
+            options={typeOptions}
+            value={selectedType}
+            onChange={(option) => setSelectedType(option)}
+            placeholder="Select Product Type"
+            isClearable
+          />
+          <Select
+            options={brandOptions}
             value={selectedBrand}
-            onChange={(e) => {
-              setSelectedBrand(e.target.value);
-              setSelectedSeries("");
-              setSelectedModel("");
+            onChange={(option) => {
+              setSelectedBrand(option);
+              setSelectedSeries(null);
+              setSelectedModel(null);
             }}
-          >
-            <option value="">All Brands</option>
-            {categories.filter((cat) => cat.type === "brand").map((brand) => (
-              <option key={brand.id} value={brand.id}>{brand.name}</option>
-            ))}
-          </select>
-          {selectedBrand && (
-            <select
-              value={selectedSeries}
-              onChange={(e) => {
-                setSelectedSeries(e.target.value);
-                setSelectedModel("");
-              }}
-            >
-              <option value="">All Series</option>
-              {categories.filter((cat) => cat.type === "series" && cat.parent === selectedBrand).map((ser) => (
-                <option key={ser.id} value={ser.id}>{ser.name}</option>
-              ))}
-            </select>
-          )}
-          {selectedSeries && (
-            <select
-              value={selectedModel}
-              onChange={(e) => setSelectedModel(e.target.value)}
-            >
-              <option value="">All Models</option>
-              {categories.filter((cat) => cat.type === "model" && cat.parent === selectedSeries).map((mod) => (
-                <option key={mod.id} value={mod.id}>{mod.name}</option>
-              ))}
-            </select>
-          )}
+            placeholder="Select Brand"
+            isClearable
+          />
+          <Select
+            options={seriesOptions}
+            value={selectedSeries}
+            onChange={(option) => {
+              setSelectedSeries(option);
+              setSelectedModel(null);
+            }}
+            placeholder="Select Series"
+            isClearable
+          />
+          <Select
+            options={modelOptions}
+            value={selectedModel}
+            onChange={(option) => setSelectedModel(option)}
+            placeholder="Select Model"
+            isClearable
+          />
         </div>
-        <button className={styles["add-button"]} onClick={() => setIsModalOpen(true)}>
+        <button
+          className={styles["add-button"]}
+          onClick={() => setIsModalOpen(true)}
+        >
           Add New Product
         </button>
       </div>
@@ -158,7 +178,7 @@ export default function ProductsManager() {
               <button
                 className={styles["delete-button"]}
                 onClick={() => {
-                  if (window.confirm('Are you sure you want to delete this product?'))
+                  if (window.confirm("Are you sure you want to delete this product?"))
                     dispatch(deleteProduct(product.id));
                 }}
               >
