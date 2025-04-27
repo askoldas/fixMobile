@@ -14,24 +14,21 @@ import styles from "./styles/products-manager.module.scss";
 export default function ProductsManager() {
   const dispatch = useDispatch();
 
-  // Redux selectors
   const products = useSelector((state) => state.products.items);
   const categories = useSelector((state) => state.categories.items);
-  const error = useSelector((state) => state.products.error || state.categories.error);
+  const error = useSelector(
+    (state) => state.products.error || state.categories.error
+  );
 
   const [productTypes, setProductTypes] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
-  
-  // Device Filtering States
   const [selectedType, setSelectedType] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [selectedSeries, setSelectedSeries] = useState("");
   const [selectedModel, setSelectedModel] = useState("");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
-  // Fetch product types from Firestore
   const fetchProductTypes = useCallback(async () => {
     try {
       const types = await fetchDocuments("ProductTypes");
@@ -41,32 +38,51 @@ export default function ProductsManager() {
     }
   }, []);
 
-  // Fetch data on mount
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchCategories());
     fetchProductTypes();
   }, [dispatch, fetchProductTypes]);
 
-  // Update filtered products when filters change
   useEffect(() => {
-    let filtered = products;
+    let filtered = [...products];
 
     if (selectedType) {
-      filtered = filtered.filter((product) => product.productType === selectedType);
+      filtered = filtered.filter(
+        (product) => product.productTypeId === selectedType
+      );
     }
-    if (selectedBrand) {
-      filtered = filtered.filter((product) => product.brands && product.brands.includes(selectedBrand));
-    }
-    if (selectedSeries) {
-      filtered = filtered.filter((product) => product.series && product.series.includes(selectedSeries));
-    }
+
     if (selectedModel) {
-      filtered = filtered.filter((product) => product.models && product.models.includes(selectedModel));
+      filtered = filtered.filter(
+        (product) =>
+          Array.isArray(product.modelIds) && product.modelIds.includes(selectedModel)
+      );
+    } else if (selectedSeries) {
+      const models = categories
+        .filter((cat) => cat.type === "model" && cat.parent === selectedSeries)
+        .map((m) => m.id);
+      filtered = filtered.filter(
+        (product) =>
+          Array.isArray(product.modelIds) &&
+          product.modelIds.some((id) => models.includes(id))
+      );
+    } else if (selectedBrand) {
+      const series = categories
+        .filter((cat) => cat.type === "series" && cat.parent === selectedBrand)
+        .map((s) => s.id);
+      const models = categories
+        .filter((cat) => cat.type === "model" && series.includes(cat.parent))
+        .map((m) => m.id);
+      filtered = filtered.filter(
+        (product) =>
+          Array.isArray(product.modelIds) &&
+          product.modelIds.some((id) => models.includes(id))
+      );
     }
 
     setFilteredProducts(filtered);
-  }, [products, selectedType, selectedBrand, selectedSeries, selectedModel]);
+  }, [products, selectedType, selectedBrand, selectedSeries, selectedModel, categories]);
 
   return (
     <div className={styles["manager-container"]}>
@@ -80,14 +96,27 @@ export default function ProductsManager() {
               <option key={type.id} value={type.id}>{type.name}</option>
             ))}
           </select>
-          <select value={selectedBrand} onChange={(e) => { setSelectedBrand(e.target.value); setSelectedSeries(""); setSelectedModel(""); }}>
+          <select
+            value={selectedBrand}
+            onChange={(e) => {
+              setSelectedBrand(e.target.value);
+              setSelectedSeries("");
+              setSelectedModel("");
+            }}
+          >
             <option value="">All Brands</option>
             {categories.filter((cat) => cat.type === "brand").map((brand) => (
               <option key={brand.id} value={brand.id}>{brand.name}</option>
             ))}
           </select>
           {selectedBrand && (
-            <select value={selectedSeries} onChange={(e) => { setSelectedSeries(e.target.value); setSelectedModel(""); }}>
+            <select
+              value={selectedSeries}
+              onChange={(e) => {
+                setSelectedSeries(e.target.value);
+                setSelectedModel("");
+              }}
+            >
               <option value="">All Series</option>
               {categories.filter((cat) => cat.type === "series" && cat.parent === selectedBrand).map((ser) => (
                 <option key={ser.id} value={ser.id}>{ser.name}</option>
@@ -95,7 +124,10 @@ export default function ProductsManager() {
             </select>
           )}
           {selectedSeries && (
-            <select value={selectedModel} onChange={(e) => setSelectedModel(e.target.value)}>
+            <select
+              value={selectedModel}
+              onChange={(e) => setSelectedModel(e.target.value)}
+            >
               <option value="">All Models</option>
               {categories.filter((cat) => cat.type === "model" && cat.parent === selectedSeries).map((mod) => (
                 <option key={mod.id} value={mod.id}>{mod.name}</option>
@@ -114,10 +146,22 @@ export default function ProductsManager() {
               {product.name} (${product.price})
             </span>
             <div className={styles["product-actions"]}>
-              <button className={styles["edit-button"]} onClick={() => { setEditingProduct(product); setIsModalOpen(true); }}>
+              <button
+                className={styles["edit-button"]}
+                onClick={() => {
+                  setEditingProduct(product);
+                  setIsModalOpen(true);
+                }}
+              >
                 Edit
               </button>
-              <button className={styles["delete-button"]} onClick={() => { if (window.confirm('Are you sure you want to delete this product?')) dispatch(deleteProduct(product.id)); }}>
+              <button
+                className={styles["delete-button"]}
+                onClick={() => {
+                  if (window.confirm('Are you sure you want to delete this product?'))
+                    dispatch(deleteProduct(product.id));
+                }}
+              >
                 Delete
               </button>
             </div>
