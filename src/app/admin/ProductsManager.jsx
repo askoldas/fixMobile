@@ -10,6 +10,7 @@ import {
 import { fetchCategories } from "@/store/slices/categoriesSlice";
 import { fetchDocuments } from "@/lib/firebaseUtils";
 import ProductFormModal from "@/app/admin/modals/ProductFormModal";
+import ProductList from "@/app/admin/components/ProductList";
 import styles from "./styles/products-manager.module.scss";
 
 export default function ProductsManager() {
@@ -159,35 +160,17 @@ export default function ProductsManager() {
           Add New Product
         </button>
       </div>
-      <ul className={styles["product-list"]}>
-        {filteredProducts.map((product) => (
-          <li key={product.id} className={styles["product-item"]}>
-            <span>
-              {product.name} (${product.price})
-            </span>
-            <div className={styles["product-actions"]}>
-              <button
-                className={styles["edit-button"]}
-                onClick={() => {
-                  setEditingProduct(product);
-                  setIsModalOpen(true);
-                }}
-              >
-                Edit
-              </button>
-              <button
-                className={styles["delete-button"]}
-                onClick={() => {
-                  if (window.confirm("Are you sure you want to delete this product?"))
-                    dispatch(deleteProduct(product.id));
-                }}
-              >
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      <ProductList
+        products={filteredProducts}
+        onEdit={(product) => {
+          setEditingProduct(product);
+          setIsModalOpen(true);
+        }}
+        onDelete={(productId) => {
+          if (window.confirm("Are you sure you want to delete this product?"))
+            dispatch(deleteProduct(productId));
+        }}
+      />
       {isModalOpen && (
         <ProductFormModal
           isOpen={isModalOpen}
