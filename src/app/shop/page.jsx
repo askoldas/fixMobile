@@ -16,7 +16,7 @@ export default function ShopPage() {
     setLoading(true);
     try {
       const { docs, lastVisible } = await fetchPaginatedDocuments(
-        'products', // Firestore collection name
+        'Products', // Firestore collection name
         {}, // No filters in this example, but you can add filters like { brand: "Huawei" }
         pageSize, // Limit per page
         isNextPage ? lastDoc : null // Use lastDoc for pagination

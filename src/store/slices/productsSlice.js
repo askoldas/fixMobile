@@ -4,24 +4,26 @@ import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc } from 'firebase
 import { db } from '@/lib/firebase';
 
 export const fetchProducts = createAsyncThunk('products/fetchProducts', async () => {
-  const querySnapshot = await getDocs(collection(db, 'products'));
-  return querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  const querySnapshot = await getDocs(collection(db, 'Products')); // Capital P
+  const data = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+  console.log("✅ Products fetched from Firestore:", data);
+  return data;
 });
 
 export const addProduct = createAsyncThunk('products/addProduct', async (product) => {
-  const docRef = await addDoc(collection(db, 'products'), product);
+  const docRef = await addDoc(collection(db, 'Products'), product);
   return { id: docRef.id, ...product };
 });
 
 export const updateProduct = createAsyncThunk('products/updateProduct', async (product) => {
   const { id, ...data } = product;
-  const productRef = doc(db, 'products', id);
+  const productRef = doc(db, 'Products', id);
   await updateDoc(productRef, data);
   return product;
 });
 
 export const deleteProduct = createAsyncThunk('products/deleteProduct', async (id) => {
-  const productRef = doc(db, 'products', id);
+  const productRef = doc(db, 'Products', id);
   await deleteDoc(productRef);
   return id;
 });

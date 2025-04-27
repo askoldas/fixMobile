@@ -1,0 +1,42 @@
+[
+  {
+    "id": "charging_port_flex",
+    "name": "Charging Port Flex",
+    "parent": null
+  },
+  {
+    "id": "soundvibration",
+    "name": "Sound/Vibration",
+    "parent": null
+  },
+  {
+    "id": "connectors",
+    "name": "Connectors",
+    "parent": null
+  },
+  {
+    "id": "cameras",
+    "name": "Cameras",
+    "parent": null
+  },
+  {
+    "id": "housings",
+    "name": "Housings",
+    "parent": null
+  },
+  {
+    "id": "batteries",
+    "name": "Batteries",
+    "parent": null
+  },
+  {
+    "id": "displays",
+    "name": "Displays",
+    "parent": null
+  },
+  {
+    "id": "buttons",
+    "name": "Buttons",
+    "parent": null
+  }
+]
