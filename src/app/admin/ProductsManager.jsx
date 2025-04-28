@@ -111,6 +111,10 @@ export default function ProductsManager() {
 
   const typeOptions = productTypes.map((type) => ({ value: type.id, label: type.name }));
 
+  const handleInlineEdit = (updatedProduct) => {
+    dispatch(updateProduct(updatedProduct));
+  };
+
   return (
     <div className={styles["manager-container"]}>
       <h2>Products</h2>
@@ -166,10 +170,13 @@ export default function ProductsManager() {
           setEditingProduct(product);
           setIsModalOpen(true);
         }}
+        onInlineEdit={handleInlineEdit}
         onDelete={(productId) => {
           if (window.confirm("Are you sure you want to delete this product?"))
             dispatch(deleteProduct(productId));
         }}
+        categories={categories}
+        productTypes={productTypes}
       />
       {isModalOpen && (
         <ProductFormModal
