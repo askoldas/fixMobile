@@ -1,5 +1,10 @@
+import AuthGuard from "@/hooks/AuthGuard";
 import CustomAdminPanel from "./AdminPanel";
 
 export default function AdminPage() {
-  return <CustomAdminPanel />;
+  return (
+    <AuthGuard>
+      <CustomAdminPanel />
+    </AuthGuard>
+  );
 }
