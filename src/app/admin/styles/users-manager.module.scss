@@ -1,0 +1,67 @@
+.managerContainer {
+    padding: 20px;
+  }
+  
+  .usersTable {
+    width: 100%;
+    border-collapse: collapse;
+  
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+    }
+  
+    th {
+      background-color: #f5f5f5;
+      text-align: left;
+    }
+  }
+  
+  .loading {
+    font-style: italic;
+  }
+  
+  .errorMessage {
+    color: red;
+  }
+  
+  .editButton {
+    margin-right: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  
+    &:hover {
+      background-color: #0056b3;
+    }
+  }
+  
+  .deleteButton {
+    padding: 5px 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  
+    &:hover {
+      background-color: #c82333;
+    }
+  }
+  
+  .roleSelect {
+    padding: 5px 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+  
+    &:focus {
+      outline: none;
+      border-color: #007bff;
+    }
+  }
+  
