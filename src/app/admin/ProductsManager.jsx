@@ -30,6 +30,8 @@ export default function ProductsManager() {
   const [selectedModel, setSelectedModel] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 25;
 
   const fetchProductTypes = useCallback(async () => {
     try {
@@ -85,6 +87,7 @@ export default function ProductsManager() {
     }
 
     setFilteredProducts(filtered);
+    setCurrentPage(1); // Reset to first page on filter change
   }, [products, selectedType, selectedBrand, selectedSeries, selectedModel, categories]);
 
   const brandOptions = categories
@@ -114,6 +117,10 @@ export default function ProductsManager() {
   const handleInlineEdit = (updatedProduct) => {
     dispatch(updateProduct(updatedProduct));
   };
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
 
   return (
     <div className={styles["manager-container"]}>
@@ -165,7 +172,7 @@ export default function ProductsManager() {
         </button>
       </div>
       <ProductList
-        products={filteredProducts}
+        products={currentProducts}
         onEdit={(product) => {
           setEditingProduct(product);
           setIsModalOpen(true);
@@ -178,6 +185,27 @@ export default function ProductsManager() {
         categories={categories}
         productTypes={productTypes}
       />
+      <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+        >
+          Previous
+        </button>
+        <span style={{ margin: "0 10px" }}>
+          {currentPage} of {Math.ceil(filteredProducts.length / itemsPerPage)}
+        </span>
+        <button
+          onClick={() =>
+            setCurrentPage((prev) =>
+              Math.min(prev + 1, Math.ceil(filteredProducts.length / itemsPerPage))
+            )
+          }
+          disabled={currentPage === Math.ceil(filteredProducts.length / itemsPerPage)}
+        >
+          Next
+        </button>
+      </div>
       {isModalOpen && (
         <ProductFormModal
           isOpen={isModalOpen}
