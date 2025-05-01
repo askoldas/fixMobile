@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './auth-modal.module.scss';
 import { closeAuthModal, toggleAuthMode } from '../../../store/slices/authSlice';
-import LoginForm from './LoginForm'; // Import LoginForm (SignupForm can be added later)
+import LoginForm from './LoginForm';
 import SignupForm from './SignupForm';
-
 
 const AuthModal = () => {
   const dispatch = useDispatch();
   const { modalOpen, mode } = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.auth.user); // ✅ Add this
 
-  if (!modalOpen) return null; // Don't render if modal is closed
+  // ✅ Auto-close modal on login/signup
+  useEffect(() => {
+    if (user) {
+      dispatch(closeAuthModal());
+    }
+  }, [user, dispatch]);
+
+  if (!modalOpen) return null;
 
   const handleClose = () => dispatch(closeAuthModal());
   const handleToggle = () => dispatch(toggleAuthMode());
@@ -25,19 +32,8 @@ const AuthModal = () => {
         <h2>{mode === 'login' ? 'Log In' : 'Sign Up'}</h2>
 
         <div className={styles.formArea}>
-  {mode === 'login' ? (
-    <LoginForm />
-  ) : (
-    // SignupForm will replace this
-    <div className={styles.formArea}>
-  {mode === 'login' ? (
-    <LoginForm />
-  ) : (
-    <SignupForm />
-  )}
-</div>
-  )}
-</div>
+          {mode === 'login' ? <LoginForm /> : <SignupForm />}
+        </div>
 
         <div className={styles.switchMode}>
           {mode === 'login' ? (

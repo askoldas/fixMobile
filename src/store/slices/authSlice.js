@@ -4,6 +4,7 @@ const initialState = {
   modalOpen: false,
   mode: 'login', // 'login' or 'signup'
   user: null, // Will store user data after authentication
+  loading: true, // ✅ Track whether auth state is being resolved
 };
 
 const authSlice = createSlice({
@@ -12,7 +13,7 @@ const authSlice = createSlice({
   reducers: {
     openAuthModal: (state, action) => {
       state.modalOpen = true;
-      state.mode = action.payload || 'login'; // Accepts 'login' or 'signup'
+      state.mode = action.payload || 'login';
     },
     closeAuthModal: (state) => {
       state.modalOpen = false;
@@ -21,10 +22,12 @@ const authSlice = createSlice({
       state.mode = state.mode === 'login' ? 'signup' : 'login';
     },
     setUser: (state, action) => {
-      state.user = action.payload; // Stores user object (e.g., { uid, email, role })
+      state.user = action.payload;
+      state.loading = false; // ✅ Mark as loaded after successful login
     },
     clearUser: (state) => {
       state.user = null;
+      state.loading = false; // ✅ Also mark as loaded even if user is unauthenticated
     },
   },
 });

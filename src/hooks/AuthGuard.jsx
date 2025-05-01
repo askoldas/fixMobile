@@ -2,24 +2,23 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import useAuthStatus from "@/hooks/useAuthStatus"; // Use our hook
+import useAuthStatus from "@/hooks/useAuthStatus";
 
 export default function AuthGuard({ children }) {
   const router = useRouter();
-  const { isLoggedIn, isAdmin, user } = useAuthStatus();
+  const { isLoggedIn, isAdmin, loading } = useAuthStatus();
 
   useEffect(() => {
-    // Wait until user is resolved
-    if (user === null) return;
+    if (loading) return; // ⏳ Wait until auth is resolved
 
     if (!isLoggedIn) {
-      router.replace("/login"); // Or wherever your login modal/route is
+      router.replace("/login");
     } else if (!isAdmin) {
-      router.replace("/shop"); // Redirect non-admins to a safe page
+      router.replace("/shop");
     }
-  }, [isLoggedIn, isAdmin, user, router]);
+  }, [loading, isLoggedIn, isAdmin, router]);
 
-  if (!user || !isLoggedIn || !isAdmin) {
+  if (loading || !isLoggedIn || !isAdmin) {
     return <div>Loading...</div>;
   }
 

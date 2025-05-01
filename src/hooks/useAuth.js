@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { auth, db } from '../lib/firebase';
-import { onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from 'firebase/auth';
+import {
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut
+} from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { setUser, clearUser } from '../store/slices/authSlice';
 
 const useAuth = () => {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(true);
 
   // Helper: Fetch role from Firestore
   const fetchUserRole = async (uid) => {
@@ -47,7 +51,6 @@ const useAuth = () => {
         console.log("No user detected, clearing user.");
         dispatch(clearUser());
       }
-      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -65,11 +68,10 @@ const useAuth = () => {
 
     console.log("Signup created user:", user);
 
-    // Write to Firestore (users collection)
     await setDoc(doc(db, 'users', user.uid), {
       uid: user.uid,
       email: user.email,
-      role: 'customer', // Default role
+      role: 'customer',
     });
     console.log("User written to Firestore with role 'customer'");
   };
@@ -79,7 +81,7 @@ const useAuth = () => {
     await signOut(auth);
   };
 
-  return { login, signup, logout, loading };
+  return { login, signup, logout };
 };
 
 export default useAuth;
