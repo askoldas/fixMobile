@@ -1,10 +1,6 @@
-import AuthGuard from "@/hooks/AuthGuard";
-import CustomAdminPanel from "./AdminPanel";
+import { redirect } from 'next/navigation';
 
 export default function AdminPage() {
-  return (
-    <AuthGuard>
-      <CustomAdminPanel />
-    </AuthGuard>
-  );
+  // Redirect to your default admin section
+  redirect('/admin/products');
 }
