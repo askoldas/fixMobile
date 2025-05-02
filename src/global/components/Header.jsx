@@ -13,7 +13,7 @@ export default function Header() {
   const pathname = usePathname();
   const { isAdmin } = useAuthStatus();
 
-  const user = useSelector((state) => state.auth.user); // ✅ Moved inside component
+  const user = useSelector((state) => state.auth.user);
   console.log("Redux user:", user);
   console.log("Header - isAdmin:", isAdmin);
 
@@ -30,6 +30,7 @@ export default function Header() {
               priority
             />
           </Link>
+
           <nav className={styles.nav}>
             <a
               href="https://serviss.fixmobile.lv/"
@@ -46,7 +47,6 @@ export default function Header() {
               Shop
             </Link>
 
-            {/* Admin link only for admins */}
             {isAdmin && (
               <Link
                 href="/admin"

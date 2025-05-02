@@ -2,30 +2,31 @@
 
 import React, { useEffect, useState } from 'react';
 import { fetchPaginatedDocuments } from '@/lib/firebaseUtils';
+import ProductList from './components/ProductList';
 
 export default function ShopPage() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [lastDoc, setLastDoc] = useState(null); // Tracks the last document for pagination
-  const [hasMore, setHasMore] = useState(true); // Indicates if more products are available
+  const [lastDoc, setLastDoc] = useState(null);
+  const [hasMore, setHasMore] = useState(true);
 
-  const pageSize = 5; // Number of products per page
+  const pageSize = 24;
 
   const fetchProducts = async (isNextPage = false) => {
     setLoading(true);
     try {
       const { docs, lastVisible } = await fetchPaginatedDocuments(
-        'Products', // Firestore collection name
-        {}, // No filters in this example, but you can add filters like { brand: "Huawei" }
-        pageSize, // Limit per page
-        isNextPage ? lastDoc : null // Use lastDoc for pagination
+        'Products',
+        {},
+        pageSize,
+        isNextPage ? lastDoc : null
       );
 
       setProducts((prev) => (isNextPage ? [...prev, ...docs] : docs));
-      setLastDoc(lastVisible); // Update last document for the next page
+      setLastDoc(lastVisible);
 
-      if (docs.length < pageSize) setHasMore(false); // No more products available
+      if (docs.length < pageSize) setHasMore(false);
     } catch (err) {
       setError('Failed to fetch products.');
       console.error(err);
@@ -35,34 +36,23 @@ export default function ShopPage() {
   };
 
   useEffect(() => {
-    fetchProducts(); // Fetch the first page on component mount
+    fetchProducts();
   }, []);
 
-  if (loading && products.length === 0) return <div className="text-center">Loading...</div>;
-  if (error) return <div className="text-center text-red-500">{error}</div>;
+  if (loading && products.length === 0) {
+    return <div className="text-center">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500">{error}</div>;
+  }
 
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Product List</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {products.map((product) => (
-          <div key={product.id} className="border rounded-lg p-4 shadow">
-            {/* Display the first image from imageUrls */}
-            {product.imageUrls && product.imageUrls[0] && (
-              <img
-                src={product.imageUrls[0]}
-                alt={product.name}
-                className="w-full h-48 object-cover mt-2 rounded"
-              />
-            )}
-            {/* Product Details */}
-            <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
-            <p className="text-gray-500">${product.price}</p>
-          </div>
-        ))}
-      </div>
 
-      {/* Load More Button */}
+      <ProductList products={products} />
+
       {hasMore && !loading && (
         <button
           onClick={() => fetchProducts(true)}
@@ -72,7 +62,9 @@ export default function ShopPage() {
         </button>
       )}
 
-      {loading && products.length > 0 && <p className="text-center mt-4">Loading more products...</p>}
+      {loading && products.length > 0 && (
+        <p className="text-center mt-4">Loading more products...</p>
+      )}
     </div>
   );
 }
