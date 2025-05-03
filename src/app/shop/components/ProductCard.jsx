@@ -1,13 +1,18 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@/store/slices/cartSlice';
+import { openCart } from '@/store/slices/uiSlice';
 import styles from '../styles/shop.module.scss';
 
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
+  const cartOpen = useSelector((state) => state.ui.cartOpen); // ✅ read cart state
 
   const handleAddToCart = () => {
     dispatch(addToCart(product));
+    if (!cartOpen) {
+      dispatch(openCart()); // ✅ only open if currently closed
+    }
   };
 
   return (

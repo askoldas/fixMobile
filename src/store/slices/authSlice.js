@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { clearCart } from '@/store/slices/cartSlice'; // Adjust path if needed
+import { signOut } from 'firebase/auth'; // Firebase
+import { auth } from '@/lib/firebase'; // Adjust path if needed
 
 const initialState = {
   modalOpen: false,
-  mode: 'login', // 'login' or 'signup'
-  user: null, // Will store user data after authentication
-  loading: true, // ✅ Track whether auth state is being resolved
+  mode: 'login',
+  user: null,
+  loading: true,
 };
 
 const authSlice = createSlice({
@@ -23,11 +26,11 @@ const authSlice = createSlice({
     },
     setUser: (state, action) => {
       state.user = action.payload;
-      state.loading = false; // ✅ Mark as loaded after successful login
+      state.loading = false;
     },
     clearUser: (state) => {
       state.user = null;
-      state.loading = false; // ✅ Also mark as loaded even if user is unauthenticated
+      state.loading = false;
     },
   },
 });
@@ -41,3 +44,15 @@ export const {
 } = authSlice.actions;
 
 export default authSlice.reducer;
+
+// --- Thunk: Logout + Cleanup ---
+export const logoutUser = () => async (dispatch) => {
+  try {
+    localStorage.removeItem('cart');
+    await signOut(auth);
+    dispatch(clearCart());
+    dispatch(clearUser());
+  } catch (error) {
+    console.error('Logout failed:', error);
+  }
+};
