@@ -15,14 +15,17 @@
   
 
   .productCard {
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 1rem;
-    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
+    justify-content: space-between; // ✅ Pushes button to bottom
+    height: 100%; // ✅ Ensures equal height in grid
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.05);
     text-align: center;
   }
+  
   
   .productImage {
     width: 100%;

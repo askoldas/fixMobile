@@ -7,6 +7,7 @@ const navItems = [
   { href: '/admin/products', label: 'Products' },
   { href: '/admin/categories', label: 'Categories' },
   { href: '/admin/users', label: 'Users' },
+  { href: '/admin/orders', label: 'Orders' }, // ✅ New item
 ];
 
 export default function AdminNav() {

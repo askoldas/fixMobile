@@ -73,6 +73,7 @@ const cartSlice = createSlice({
       state.items = [];
       state.totalQuantity = 0;
       state.totalPrice = 0;
+      localStorage.removeItem('cart'); // Clear persisted cart data
     },
   },
 });

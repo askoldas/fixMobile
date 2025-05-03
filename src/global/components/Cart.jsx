@@ -53,7 +53,11 @@ const Cart = () => {
           <span>Total:</span>
           <strong>€{totalPrice.toFixed(2)}</strong>
         </div>
-        <button onClick={handleCheckout} disabled={items.length === 0} style={{ width: '100%', padding: '0.75rem', background: 'black', color: 'white' }}>
+        <button
+          onClick={handleCheckout}
+          disabled={items.length === 0}
+          style={{ width: '100%', padding: '0.75rem', background: 'black', color: 'white' }}
+        >
           Proceed to Checkout
         </button>
       </div>
