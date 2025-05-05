@@ -1,47 +1,95 @@
 .checkoutContainer {
-    max-width: 800px;
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+    max-width: 1200px;
     margin: 2rem auto;
-    padding: 1rem;
+    padding: 2rem;
     background: #fff;
-    border-radius: 6px;
+    border-radius: 8px;
+  
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
+    }
   }
   
   .form {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: 1.5rem;
+  }
+  
+  .form label {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
   }
   
   .form input,
   .form textarea {
-    padding: 0.75rem;
+    padding: 1rem;
     font-size: 1rem;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .form textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+  
+  .readonly {
+    background-color: #f6f6f6;
+    color: #444;
+  }
+  
+  .checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
   }
   
   .form button {
-    padding: 0.75rem;
+    margin-top: 1rem;
+    padding: 1rem;
     font-size: 1rem;
     background: black;
     color: white;
     border: none;
+    border-radius: 6px;
+    width: 100%;
     cursor: pointer;
-    align-self: flex-start;
   }
   
   .cartSummary {
-    margin-top: 2rem;
+    background: #f9f9f9;
+    padding: 1.5rem;
+    border-radius: 8px;
+    height: fit-content;
+  }
+  
+  .cartSummary h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
   }
   
   .cartSummary ul {
     list-style: none;
     padding: 0;
+    margin: 0;
+  }
+  
+  .cartSummary li {
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
   }
   
   .total {
     font-weight: bold;
+    font-size: 1.1rem;
     margin-top: 1rem;
   }
   

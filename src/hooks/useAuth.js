@@ -7,34 +7,34 @@ import {
   createUserWithEmailAndPassword,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
-import { setUser, clearUser, logoutUser } from '../store/slices/authSlice'; // ✅ Add logoutUser thunk
+import { setUser, clearUser, logoutUser } from '../store/slices/authSlice';
 
 const useAuth = () => {
   const dispatch = useDispatch();
 
-  const fetchUserRole = async (uid) => {
+  // Fetch full user document
+  const fetchUserProfile = async (uid) => {
     try {
       const userDoc = await getDoc(doc(db, 'users', uid));
       if (userDoc.exists()) {
-        return userDoc.data().role || 'customer';
+        return userDoc.data(); // includes role, fullName, legal, delivery, etc.
       }
-      return 'customer';
+      return null;
     } catch (error) {
-      console.error("Error fetching user role:", error);
-      return 'customer';
+      console.error('Error fetching user profile:', error);
+      return null;
     }
   };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const role = await fetchUserRole(user.uid);
-        const userData = {
-          uid: user.uid,
-          email: user.email,
-          role,
-        };
-        dispatch(setUser(userData));
+        const profile = await fetchUserProfile(user.uid);
+        if (profile) {
+          dispatch(setUser({ uid: user.uid, ...profile }));
+        } else {
+          dispatch(setUser({ uid: user.uid, email: user.email, role: 'customer' }));
+        }
       } else {
         dispatch(clearUser());
       }
@@ -58,7 +58,6 @@ const useAuth = () => {
     });
   };
 
-  // ✅ Updated logout to dispatch the full logoutUser thunk
   const logout = () => {
     dispatch(logoutUser());
   };
