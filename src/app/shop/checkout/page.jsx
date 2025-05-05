@@ -1,28 +1,54 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearCart } from '@/store/slices/cartSlice';
 import { useRouter } from 'next/navigation';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { db } from '@/lib/firebase'; 
+import { db } from '@/lib/firebase';
 
-import styles from '@/app/shop/styles/checkout.module.scss'; 
+import styles from '@/app/shop/styles/checkout.module.scss';
 
 export default function CheckoutPage() {
   const dispatch = useDispatch();
   const router = useRouter();
-  const cart = useSelector((state) => state.cart);
 
+  const cart = useSelector((state) => state.cart);
+  const user = useSelector((state) => state.auth.user);
+
+  const [sameAsLegal, setSameAsLegal] = useState(true);
   const [form, setForm] = useState({
     name: '',
     email: '',
     phone: '',
-    address: '',
+    deliveryAddress: '',
   });
 
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+
+  // Populate fields from user profile
+  useEffect(() => {
+    if (user) {
+      setForm((prev) => ({
+        ...prev,
+        name: user.fullName || '',
+        email: user.email || '',
+        phone: user.phone || '',
+        deliveryAddress: formatAddress(user.delivery),
+      }));
+    }
+  }, [user]);
+
+  const formatAddress = (addr) => {
+    if (!addr) return '';
+    return `${addr.street}, ${addr.city}, ${addr.zip}, ${addr.country}`;
+  };
+
+  const parseAddress = (raw) => {
+    const [street, city, zip, country] = raw.split(',').map((s) => s.trim());
+    return { street, city, zip, country };
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -30,8 +56,14 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.name || !form.email || !form.phone || !form.address) {
-      setError('Please fill in all fields.');
+
+    if (!form.name || !form.email || !form.phone) {
+      setError('Please fill in all contact fields.');
+      return;
+    }
+
+    if (!sameAsLegal && !form.deliveryAddress) {
+      setError('Please enter delivery address or check "Same as legal".');
       return;
     }
 
@@ -43,16 +75,24 @@ export default function CheckoutPage() {
     setSubmitting(true);
 
     try {
-      await addDoc(collection(db, 'orders'), {
-        contactInfo: form,
+      const order = {
+        contactInfo: {
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+        },
+        legalAddress: user.legal || null,
+        deliveryAddress: sameAsLegal ? user.legal : parseAddress(form.deliveryAddress),
         items: cart.items,
         totalPrice: cart.totalPrice,
         createdAt: serverTimestamp(),
         status: 'pending',
-      });
+      };
+
+      await addDoc(collection(db, 'orders'), order);
 
       dispatch(clearCart());
-      router.push('/shop'); // or create a /thank-you page
+      router.push('/shop');
     } catch (err) {
       console.error('Order submission failed:', err);
       setError('Something went wrong. Please try again.');
@@ -84,12 +124,33 @@ export default function CheckoutPage() {
           value={form.phone}
           onChange={handleChange}
         />
-        <textarea
-          name="address"
-          placeholder="Shipping Address"
-          value={form.address}
-          onChange={handleChange}
-        />
+
+        <div>
+          <label>Legal Address</label>
+          <textarea
+            readOnly
+            value={formatAddress(user?.legal)}
+            className={styles.readonly}
+          />
+        </div>
+
+        <label>
+          <input
+            type="checkbox"
+            checked={sameAsLegal}
+            onChange={() => setSameAsLegal(!sameAsLegal)}
+          />
+          Same as legal address
+        </label>
+
+        {!sameAsLegal && (
+          <textarea
+            name="deliveryAddress"
+            placeholder="Delivery Address (street, city, zip, country)"
+            value={form.deliveryAddress}
+            onChange={handleChange}
+          />
+        )}
 
         {error && <p className={styles.error}>{error}</p>}
 
