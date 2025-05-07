@@ -16,26 +16,40 @@ export default function CheckoutPage() {
   const cart = useSelector((state) => state.cart);
   const user = useSelector((state) => state.auth.user);
 
-  const [sameAsLegal, setSameAsLegal] = useState(true);
+  const [sameAsBilling, setSameAsBilling] = useState(true);
   const [form, setForm] = useState({
-    name: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
-    deliveryAddress: '',
+    country: 'Latvia',
+    street: '',
+    apartment: '',
+    city: '',
+    municipality: '',
+    postalCode: '',
+    shippingAddress: '',
   });
 
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
-  // Populate fields from user profile
   useEffect(() => {
     if (user) {
+      const [first, ...rest] = user.fullName?.split(' ') || [];
       setForm((prev) => ({
         ...prev,
-        name: user.fullName || '',
+        firstName: first || '',
+        lastName: rest?.join(' ') || '',
         email: user.email || '',
         phone: user.phone || '',
-        deliveryAddress: formatAddress(user.delivery),
+        country: user.legal?.country || 'Latvia',
+        street: user.legal?.street || '',
+        city: user.legal?.city || '',
+        postalCode: user.legal?.zip || '',
+        municipality: '',
+        apartment: '',
+        shippingAddress: formatAddress(user.delivery),
       }));
     }
   }, [user]);
@@ -45,25 +59,26 @@ export default function CheckoutPage() {
     return `${addr.street}, ${addr.city}, ${addr.zip}, ${addr.country}`;
   };
 
-  const parseAddress = (raw) => {
+  const parseShippingAddress = (raw) => {
     const [street, city, zip, country] = raw.split(',').map((s) => s.trim());
     return { street, city, zip, country };
   };
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.name || !form.email || !form.phone) {
-      setError('Please fill in all contact fields.');
+    if (!form.firstName || !form.lastName || !form.email || !form.phone || !form.street || !form.city || !form.postalCode) {
+      setError('Please fill in all required billing fields.');
       return;
     }
 
-    if (!sameAsLegal && !form.deliveryAddress) {
-      setError('Please enter delivery address or check "Same as legal".');
+    if (!sameAsBilling && !form.shippingAddress) {
+      setError('Please enter a delivery address or check "Same as billing address".');
       return;
     }
 
@@ -72,24 +87,34 @@ export default function CheckoutPage() {
       return;
     }
 
+    const billingAddress = {
+      country: form.country,
+      street: form.street,
+      apartment: form.apartment,
+      city: form.city,
+      municipality: form.municipality,
+      zip: form.postalCode,
+    };
+
+    const shippingAddress = sameAsBilling ? billingAddress : parseShippingAddress(form.shippingAddress);
+    const contactName = `${form.firstName} ${form.lastName}`;
+
     setSubmitting(true);
 
     try {
-      const order = {
+      await addDoc(collection(db, 'orders'), {
         contactInfo: {
-          name: form.name,
+          name: contactName,
           email: form.email,
           phone: form.phone,
         },
-        legalAddress: user.legal || null,
-        deliveryAddress: sameAsLegal ? user.legal : parseAddress(form.deliveryAddress),
+        legalAddress: billingAddress,
+        deliveryAddress: shippingAddress,
         items: cart.items,
         totalPrice: cart.totalPrice,
         createdAt: serverTimestamp(),
         status: 'pending',
-      };
-
-      await addDoc(collection(db, 'orders'), order);
+      });
 
       dispatch(clearCart());
       router.push('/shop');
@@ -102,77 +127,75 @@ export default function CheckoutPage() {
   };
 
   return (
-    <div className={styles.checkoutContainer}>
-      <h1>Checkout</h1>
-      <form onSubmit={handleSubmit} className={styles.form}>
-        <input
-          name="name"
-          placeholder="Name"
-          value={form.name}
-          onChange={handleChange}
-        />
-        <input
-          name="email"
-          placeholder="Email"
-          type="email"
-          value={form.email}
-          onChange={handleChange}
-        />
-        <input
-          name="phone"
-          placeholder="Phone"
-          value={form.phone}
-          onChange={handleChange}
-        />
+    <div className={styles.checkoutGrid}>
+      <div className={styles.formColumn}>
+        <h2>Contact Information</h2>
+        <p className={styles.subtext}>We’ll use this email to send you details and updates about your order.</p>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <input type="email" name="email" placeholder="Email address" value={form.email} onChange={handleChange} />
 
-        <div>
-          <label>Legal Address</label>
-          <textarea
-            readOnly
-            value={formatAddress(user?.legal)}
-            className={styles.readonly}
-          />
-        </div>
+          <h3>Billing address</h3>
+          <select name="country" value={form.country} onChange={handleChange}>
+            <option value="Latvia">Latvia</option>
+          </select>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={sameAsLegal}
-            onChange={() => setSameAsLegal(!sameAsLegal)}
-          />
-          Same as legal address
-        </label>
+          <div className={styles.nameRow}>
+            <input name="firstName" placeholder="First name" value={form.firstName} onChange={handleChange} />
+            <input name="lastName" placeholder="Last name" value={form.lastName} onChange={handleChange} />
+          </div>
 
-        {!sameAsLegal && (
-          <textarea
-            name="deliveryAddress"
-            placeholder="Delivery Address (street, city, zip, country)"
-            value={form.deliveryAddress}
-            onChange={handleChange}
-          />
-        )}
+          <input name="street" placeholder="Address" value={form.street} onChange={handleChange} />
+          <input name="apartment" placeholder="Apartment, suite, etc." value={form.apartment} onChange={handleChange} />
 
-        {error && <p className={styles.error}>{error}</p>}
+          <div className={styles.row}>
+            <input name="city" placeholder="City" value={form.city} onChange={handleChange} />
+            <input name="municipality" placeholder="Municipality (optional)" value={form.municipality} onChange={handleChange} />
+          </div>
 
-        <button type="submit" disabled={submitting}>
-          {submitting ? 'Submitting...' : 'Place Order'}
-        </button>
-      </form>
+          <div className={styles.row}>
+            <input name="postalCode" placeholder="Postal code" value={form.postalCode} onChange={handleChange} />
+            <input name="phone" placeholder="Phone" value={form.phone} onChange={handleChange} />
+          </div>
+
+          <h3>Shipping address</h3>
+          <div className={styles.checkboxWrapper}>
+            <input id="sameAsBilling" type="checkbox" checked={sameAsBilling} onChange={() => setSameAsBilling(!sameAsBilling)} />
+            <label htmlFor="sameAsBilling">Same as billing address</label>
+          </div>
+
+          {!sameAsBilling && (
+            <textarea
+              name="shippingAddress"
+              placeholder="Shipping address (street, city, zip, country)"
+              value={form.shippingAddress}
+              onChange={handleChange}
+            />
+          )}
+
+          {error && <p className={styles.error}>{error}</p>}
+
+          <button type="submit" disabled={submitting}>
+            {submitting ? 'Submitting...' : 'Place Order'}
+          </button>
+        </form>
+      </div>
 
       <div className={styles.cartSummary}>
-        <h2>Order Summary</h2>
+        <h2>Order summary</h2>
         {cart.items.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
-          <ul>
-            {cart.items.map((item) => (
-              <li key={item.productId}>
-                {item.name} × {item.quantity} — €{(item.price * item.quantity).toFixed(2)}
-              </li>
-            ))}
-          </ul>
+          <>
+            <ul>
+              {cart.items.map((item) => (
+                <li key={item.productId}>
+                  {item.name} × {item.quantity} — €{(item.price * item.quantity).toFixed(2)}
+                </li>
+              ))}
+            </ul>
+            <p className={styles.total}>Total: €{cart.totalPrice.toFixed(2)}</p>
+          </>
         )}
-        <p className={styles.total}>Total: €{cart.totalPrice.toFixed(2)}</p>
       </div>
     </div>
   );
