@@ -54,12 +54,33 @@ export default function ShopPage() {
       <ProductList products={products} />
 
       {hasMore && !loading && (
+        <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '24px',
+          marginBottom: '32px',
+        }}
+      >
         <button
           onClick={() => fetchProducts(true)}
-          className="mt-6 px-4 py-2 bg-blue-500 text-white rounded"
+          style={{
+            backgroundColor: '#ff6600',
+            color: '#fff',
+            padding: '12px 24px',
+            fontWeight: 'bold',
+            border: 'none',
+            borderRadius: '999px',
+            cursor: 'pointer',
+            fontSize: '1rem',
+          }}
         >
           Load More
         </button>
+      </div>
+      
+      
+      
       )}
 
       {loading && products.length > 0 && (
