@@ -11,6 +11,15 @@ html, body {
   height: 100%;
 }
 
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden; // Prevents scrolling on the body
+  height: 100vh; // Ensures full viewport height
+  display: flex;
+  flex-direction: column;
+}
+
 img, video {
   max-width: 100%;
   height: auto;

@@ -19,7 +19,7 @@ const Cart = () => {
   const handleClose = () => dispatch(closeCart());
   const handleCheckout = () => {
     dispatch(closeCart());
-    router.push('/checkout');
+    router.push('/shop/checkout');
   };
 
   return (

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "../styles/products-manager.module.scss";
+import { useImageUrl } from '@/hooks/useImageUrl';
 
 export default function ProductListItem({ product, onEdit, onInlineEdit, onDelete, isExpanded, onToggleExpand, categories, productTypes }) {
   const [editData, setEditData] = useState({
@@ -14,6 +15,7 @@ export default function ProductListItem({ product, onEdit, onInlineEdit, onDelet
   });
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const resolvedImageUrl = useImageUrl(product.imageUrls?.[currentImageIndex] || null);
 
   useEffect(() => {
     if (categories && categories.length > 0) {
@@ -47,37 +49,47 @@ export default function ProductListItem({ product, onEdit, onInlineEdit, onDelet
   return (
     <>
       <li
-  className={styles["product-item"]}
-  onClick={onToggleExpand}
-  style={{
-    cursor: "pointer",
-    padding: "10px",
-    backgroundColor: "#f9f9f9",
-    borderRadius: "5px",
-    marginBottom: "5px",
-    display: "grid",                      // Add grid layout
-    gridTemplateColumns: "1fr 160px 160px", // Wide first column, fixed last two
-    alignItems: "center",
-  }}
->
-  <span style={{ textAlign: "left" }}>{product.name}</span>
-  <span style={{ textAlign: "right" }}>
-    {typeof product.price === "number" ? product.price.toFixed(2) : "0.00"} €
-  </span>
-  <span style={{ textAlign: "right" }}>
-    {typeof product.quantity === "number" ? product.quantity : 0}
-  </span>
-</li>
-
+        className={styles["product-item"]}
+        onClick={onToggleExpand}
+        style={{
+          cursor: "pointer",
+          padding: "10px",
+          backgroundColor: "#f9f9f9",
+          borderRadius: "5px",
+          marginBottom: "5px",
+          display: "grid",
+          gridTemplateColumns: "1fr 160px 160px",
+          alignItems: "center",
+        }}
+      >
+        <span style={{ textAlign: "left" }}>{product.name}</span>
+        <span style={{ textAlign: "right" }}>
+          {typeof product.price === "number" ? product.price.toFixed(2) : "0.00"} €
+        </span>
+        <span style={{ textAlign: "right" }}>
+          {typeof product.quantity === "number" ? product.quantity : 0}
+        </span>
+      </li>
 
       {isExpanded && (
-        <div style={{ marginBottom: "15px", padding: "15px", border: "1px solid #ddd", borderRadius: "5px", backgroundColor: "#fff", display: "grid", gridTemplateColumns: "1fr 2fr 2fr", gap: "20px" }}>
+        <div
+          style={{
+            marginBottom: "15px",
+            padding: "15px",
+            border: "1px solid #ddd",
+            borderRadius: "5px",
+            backgroundColor: "#fff",
+            display: "grid",
+            gridTemplateColumns: "1fr 2fr 2fr",
+            gap: "20px",
+          }}
+        >
           {/* Left Column: Image Carousel */}
           <div style={{ textAlign: "center", position: "relative" }}>
-            {product.imageUrls && product.imageUrls.length > 0 ? (
+            {resolvedImageUrl ? (
               <>
                 <img
-                  src={product.imageUrls[currentImageIndex]}
+                  src={resolvedImageUrl}
                   alt={product.name}
                   style={{ width: "100%", marginBottom: "10px" }}
                 />
@@ -117,9 +129,10 @@ export default function ProductListItem({ product, onEdit, onInlineEdit, onDelet
                   alignItems: "center",
                   fontSize: "24px",
                   color: "#ccc",
+                  marginBottom: "10px"
                 }}
               >
-                +
+                Loading image...
               </div>
             )}
           </div>

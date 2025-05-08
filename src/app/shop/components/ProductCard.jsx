@@ -2,27 +2,34 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from '@/store/slices/cartSlice';
 import { openCart } from '@/store/slices/uiSlice';
+import { useImageUrl } from '@/hooks/useImageUrl'; // ✅ import the hook
 import styles from '../styles/shop.module.scss';
 
 export default function ProductCard({ product }) {
   const dispatch = useDispatch();
-  const cartOpen = useSelector((state) => state.ui.cartOpen); // ✅ read cart state
+  const cartOpen = useSelector((state) => state.ui.cartOpen);
+
+  const imageUrl = useImageUrl(product.imageUrls?.[0] || null); // ✅ resolve Storage URL
 
   const handleAddToCart = () => {
     dispatch(addToCart(product));
     if (!cartOpen) {
-      dispatch(openCart()); // ✅ only open if currently closed
+      dispatch(openCart());
     }
   };
 
   return (
     <div className={styles.productCard}>
-      {product.imageUrls && product.imageUrls[0] && (
+      {imageUrl ? (
         <img
-          src={product.imageUrls[0]}
+          src={imageUrl}
           alt={product.name}
           className={styles.productImage}
         />
+      ) : (
+        <div className={styles.productImagePlaceholder}>
+          Image loading...
+        </div>
       )}
       <h2 className={styles.productName}>{product.name}</h2>
       <p className={styles.productPrice}>€{product.price}</p>

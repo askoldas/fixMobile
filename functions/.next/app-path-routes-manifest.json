@@ -1,0 +1,14 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/favicon.ico/route": "/favicon.ico",
+  "/login/page": "/login",
+  "/shop/page": "/shop",
+  "/page": "/",
+  "/shop/checkout/page": "/shop/checkout",
+  "/user/page": "/user",
+  "/admin/products/page": "/admin/products",
+  "/admin/page": "/admin",
+  "/admin/orders/page": "/admin/orders",
+  "/admin/users/page": "/admin/users",
+  "/admin/categories/page": "/admin/categories"
+}
