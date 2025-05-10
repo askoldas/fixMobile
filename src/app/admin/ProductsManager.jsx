@@ -108,15 +108,11 @@ export default function ProductsManager() {
           .map((ser) => ser.id);
         return seriesUnderBrand.includes(cat.parent);
       }
-      return true; // no brand or series selected
+      return true;
     })
     .map((mod) => ({ value: mod.id, label: mod.name }));
 
   const typeOptions = productTypes.map((type) => ({ value: type.id, label: type.name }));
-
-  const handleInlineEdit = (updatedProduct) => {
-    dispatch(updateProduct(updatedProduct));
-  };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -126,6 +122,7 @@ export default function ProductsManager() {
     <div className={styles["manager-container"]}>
       <h2>Products</h2>
       {error && <p className={styles["error-message"]}>{error}</p>}
+
       <div className={styles["top-section"]}>
         <div className={styles["filters"]}>
           <Select
@@ -164,27 +161,30 @@ export default function ProductsManager() {
             isClearable
           />
         </div>
+
         <button
           className={styles["add-button"]}
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setEditingProduct(null);
+            setIsModalOpen(true);
+          }}
         >
           Add New Product
         </button>
       </div>
+
       <ProductList
         products={currentProducts}
         onEdit={(product) => {
           setEditingProduct(product);
           setIsModalOpen(true);
         }}
-        onInlineEdit={handleInlineEdit}
         onDelete={(productId) => {
           if (window.confirm("Are you sure you want to delete this product?"))
             dispatch(deleteProduct(productId));
         }}
-        categories={categories}
-        productTypes={productTypes}
       />
+
       <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
         <button
           onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
@@ -206,18 +206,21 @@ export default function ProductsManager() {
           Next
         </button>
       </div>
+
       {isModalOpen && (
         <ProductFormModal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSubmit={(productData) => {
             if (editingProduct) {
-              dispatch(updateProduct({ ...editingProduct, ...productData }));
+              dispatch(updateProduct(productData));
             } else {
               dispatch(addProduct(productData));
+              setCurrentPage(1);
             }
             setIsModalOpen(false);
           }}
+          onDelete={(id) => dispatch(deleteProduct(id))} // ✅ Pass delete handler to modal
           initialData={editingProduct}
           categories={categories}
           productTypes={productTypes}
