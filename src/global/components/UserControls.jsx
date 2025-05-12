@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openAuthModal } from "@/store/slices/authSlice";
 import { toggleCart } from "@/store/slices/uiSlice"; // 🆕 Import cart toggle action
 import useAuth from "@/hooks/useAuth";
-import Button from "@/global/components/Button";
+import Button from "@/global/components/base/Button";
 import styles from "@/global/styles/UserControls.module.scss";
 
 export default function UserControls() {
