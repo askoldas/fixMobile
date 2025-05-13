@@ -2,8 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
-import Button from "@/global/components/Button"; // Import reusable Button component
-import styles from "@/global/styles/hero.module.scss"; // Import SCSS styles
+import Button from "@/global/components/base/Button"; // Import reusable Button component
+import styles from "@/global/components/layout/hero.module.scss"; // Import SCSS styles
 
 export default function Hero() {
   return (

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import useAuth from '@/hooks/useAuth';
+import Button from '@/global/components/base/Button';
 import styles from './auth-modal.module.scss';
 
 export default function LoginForm() {
@@ -47,10 +48,14 @@ export default function LoginForm() {
 
       {error && <div className={styles.error}>{error}</div>}
 
-      <button type="submit" className={styles.submitButton} disabled={loading}>
-        {loading ? 'Logging in...' : 'Log In'}
-      </button>
+      <Button
+        type="submit"
+        variant="primary"
+        size="m"
+        disabled={loading}
+      >
+        {loading ? 'Logging in…' : 'Log In'}
+      </Button>
     </form>
   );
 }
-

@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useCallback } from "react";
+'use client';
+
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import {
@@ -9,8 +11,13 @@ import {
 } from "@/store/slices/productsSlice";
 import { fetchCategories } from "@/store/slices/categoriesSlice";
 import { fetchDocuments } from "@/lib/firebaseUtils";
+
 import ProductFormModal from "@/app/admin/modals/ProductFormModal";
 import ProductList from "@/app/admin/components/ProductList";
+import Pagination from "@/global/components/ui/Pagination";
+import Button from "@/global/components/base/Button";
+import useFilteredProducts from "@/hooks/useFilteredProducts";
+
 import styles from "./styles/products-manager.module.scss";
 
 export default function ProductsManager() {
@@ -23,7 +30,6 @@ export default function ProductsManager() {
   );
 
   const [productTypes, setProductTypes] = useState([]);
-  const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedType, setSelectedType] = useState(null);
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [selectedSeries, setSelectedSeries] = useState(null);
@@ -48,54 +54,29 @@ export default function ProductsManager() {
     fetchProductTypes();
   }, [dispatch, fetchProductTypes]);
 
+  const prevFilterKey = `${selectedType?.value}-${selectedBrand?.value}-${selectedSeries?.value}-${selectedModel?.value}`;
+
   useEffect(() => {
-    let filtered = [...products];
+    setCurrentPage(1);
+  }, [prevFilterKey]);
 
-    if (selectedType) {
-      filtered = filtered.filter(
-        (product) => product.productTypeId === selectedType.value
-      );
-    }
-
-    if (selectedModel) {
-      filtered = filtered.filter(
-        (product) =>
-          Array.isArray(product.modelIds) &&
-          product.modelIds.includes(selectedModel.value)
-      );
-    } else if (selectedSeries) {
-      const models = categories
-        .filter((cat) => cat.type === "model" && cat.parent === selectedSeries.value)
-        .map((m) => m.id);
-      filtered = filtered.filter(
-        (product) =>
-          Array.isArray(product.modelIds) &&
-          product.modelIds.some((id) => models.includes(id))
-      );
-    } else if (selectedBrand) {
-      const series = categories
-        .filter((cat) => cat.type === "series" && cat.parent === selectedBrand.value)
-        .map((s) => s.id);
-      const models = categories
-        .filter((cat) => cat.type === "model" && series.includes(cat.parent))
-        .map((m) => m.id);
-      filtered = filtered.filter(
-        (product) =>
-          Array.isArray(product.modelIds) &&
-          product.modelIds.some((id) => models.includes(id))
-      );
-    }
-
-    setFilteredProducts(filtered);
-    setCurrentPage(1); // Reset to first page on filter change
-  }, [products, selectedType, selectedBrand, selectedSeries, selectedModel, categories]);
+  const filteredProducts = useFilteredProducts({
+    products,
+    categories,
+    selectedType,
+    selectedBrand,
+    selectedSeries,
+    selectedModel,
+  });
 
   const brandOptions = categories
     .filter((cat) => cat.type === "brand")
     .map((brand) => ({ value: brand.id, label: brand.name }));
 
   const seriesOptions = categories
-    .filter((cat) => cat.type === "series" && (!selectedBrand || cat.parent === selectedBrand.value))
+    .filter(
+      (cat) => cat.type === "series" && (!selectedBrand || cat.parent === selectedBrand.value)
+    )
     .map((ser) => ({ value: ser.id, label: ser.name }));
 
   const modelOptions = categories
@@ -162,15 +143,16 @@ export default function ProductsManager() {
           />
         </div>
 
-        <button
-          className={styles["add-button"]}
+        <Button
+          variant="primary"
+          size="m"
           onClick={() => {
             setEditingProduct(null);
             setIsModalOpen(true);
           }}
         >
-          Add New Product
-        </button>
+          Add New
+        </Button>
       </div>
 
       <ProductList
@@ -185,27 +167,11 @@ export default function ProductsManager() {
         }}
       />
 
-      <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        <span style={{ margin: "0 10px" }}>
-          {currentPage} of {Math.ceil(filteredProducts.length / itemsPerPage)}
-        </span>
-        <button
-          onClick={() =>
-            setCurrentPage((prev) =>
-              Math.min(prev + 1, Math.ceil(filteredProducts.length / itemsPerPage))
-            )
-          }
-          disabled={currentPage === Math.ceil(filteredProducts.length / itemsPerPage)}
-        >
-          Next
-        </button>
-      </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={Math.ceil(filteredProducts.length / itemsPerPage)}
+        onPageChange={setCurrentPage}
+      />
 
       {isModalOpen && (
         <ProductFormModal
@@ -220,7 +186,7 @@ export default function ProductsManager() {
             }
             setIsModalOpen(false);
           }}
-          onDelete={(id) => dispatch(deleteProduct(id))} // ✅ Pass delete handler to modal
+          onDelete={(id) => dispatch(deleteProduct(id))}
           initialData={editingProduct}
           categories={categories}
           productTypes={productTypes}

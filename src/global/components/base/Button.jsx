@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import styles from "@/global/styles/button.module.scss"; // Correct import for SCSS modules
+import styles from "@/global/components/base/button.module.scss"; // Correct import for SCSS modules
 
 export default function Button({
   variant = "primary",

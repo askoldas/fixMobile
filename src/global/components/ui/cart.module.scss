@@ -1,0 +1,79 @@
+@use "@/global/variables" as *;
+
+.cartDrawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 350px;
+  height: 100%;
+  background-color: $white;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 999;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid $light-gray;
+
+  @media (max-width: $breakpoint-m) {
+    width: 100%;
+  }
+}
+
+.open {
+  transform: translateX(0%);
+}
+
+.closed {
+  transform: translateX(100%);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $spacing-m;
+  border-bottom: 1px solid $light-gray;
+
+  h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: $font-weight-bold;
+  }
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding: $spacing-m;
+}
+
+.item {
+  margin-bottom: $spacing-m;
+
+  p {
+    margin-bottom: $spacing-xs;
+  }
+}
+
+.itemControls {
+  display: flex;
+  align-items: center;
+  gap: $spacing-sm;
+  margin-top: $spacing-xs;
+}
+
+.removeButton {
+  color: red;
+}
+
+.footer {
+  padding: $spacing-m;
+  border-top: 1px solid $light-gray;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: $spacing-m;
+}

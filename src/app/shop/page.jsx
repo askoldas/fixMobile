@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { fetchPaginatedDocuments } from '@/lib/firebaseUtils';
 import ProductList from './components/ProductList';
+import Button from '@/global/components/base/Button';
+import styles from './styles/shop.module.scss'; // ✅ Import SCSS module
 
 export default function ShopPage() {
   const [products, setProducts] = useState([]);
@@ -40,51 +42,33 @@ export default function ShopPage() {
   }, []);
 
   if (loading && products.length === 0) {
-    return <div className="text-center">Loading...</div>;
+    return <div className={styles.loadingMessage}>Loading...</div>;
   }
 
   if (error) {
-    return <div className="text-center text-red-500">{error}</div>;
+    return <div className={styles.errorMessage}>{error}</div>;
   }
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Product List</h1>
+    <div className={styles.shopPage}>
+      <h1 className={styles.pageTitle}>Product List</h1>
 
       <ProductList products={products} />
 
       {hasMore && !loading && (
-        <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginTop: '24px',
-          marginBottom: '32px',
-        }}
-      >
-        <button
-          onClick={() => fetchProducts(true)}
-          style={{
-            backgroundColor: '#ff6600',
-            color: '#fff',
-            padding: '12px 24px',
-            fontWeight: 'bold',
-            border: 'none',
-            borderRadius: '999px',
-            cursor: 'pointer',
-            fontSize: '1rem',
-          }}
-        >
-          Load More
-        </button>
-      </div>
-      
-      
-      
+        <div className={styles.loadMoreContainer}>
+          <Button
+            variant="primary"
+            size="m"
+            onClick={() => fetchProducts(true)}
+          >
+            Load More
+          </Button>
+        </div>
       )}
 
       {loading && products.length > 0 && (
-        <p className="text-center mt-4">Loading more products...</p>
+        <p className={styles.loadingMessage}>Loading more products...</p>
       )}
     </div>
   );
