@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import useAuth from '@/hooks/useAuth';
+import Button from '@/global/components/base/Button';
 import styles from './auth-modal.module.scss'; // Reuse modal styles
 
 const SignupForm = () => {
@@ -64,9 +65,14 @@ const SignupForm = () => {
 
       {error && <div className={styles.error}>{error}</div>}
 
-      <button type="submit" className={styles.submitButton} disabled={loading}>
-        {loading ? 'Creating Account...' : 'Sign Up'}
-      </button>
+      <Button
+        type="submit"
+        variant="primary"
+        size="m"
+        disabled={loading}
+      >
+        {loading ? 'Creating Account…' : 'Sign Up'}
+      </Button>
     </form>
   );
 };

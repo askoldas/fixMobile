@@ -6,8 +6,8 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useSelector } from "react-redux";
 import useAuthStatus from "@/hooks/useAuthStatus";
-import UserControls from "@/global/components/UserControls";
-import styles from "@/global/styles/Header.module.scss";
+import UserControls from "@/global/components/ui/UserControls";
+import styles from "@/global/components/layout/header.module.scss";
 
 export default function Header() {
   const pathname = usePathname();

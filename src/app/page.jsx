@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import Hero from "@/global/components/Hero"; // Import Hero component
+import Hero from "@/global/components/layout/Hero"; // Import Hero component
 
 export default function HomePage() {
   return (

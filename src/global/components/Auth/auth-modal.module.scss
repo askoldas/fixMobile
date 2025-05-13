@@ -1,102 +1,53 @@
-.overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.7);
+@use "@/global/variables" as *;
+
+.formArea {
+  margin: 2rem 0;
+
+  .loginForm {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .modal {
-    background-color: #fff;
-    padding: 2rem;
-    width: 400px;
-    max-width: 90%;
-    border-radius: 8px;
-    position: relative;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-    text-align: center;
-  }
-  
-  .closeButton {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    font-size: 1.5rem;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .formArea {
-    margin: 2rem 0;
-  
-    .loginForm {  // Nest LoginForm styles here
+    flex-direction: column;
+    gap: 1rem;
+
+    .formGroup {
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-  
-      .formGroup {
-        display: flex;
-        flex-direction: column;
-  
-        label {
-          margin-bottom: 0.5rem;
-          font-weight: bold;
-        }
-  
-        input {
-          padding: 0.5rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-  
-          &:focus {
-            outline: none;
-            border-color: #007bff;
-          }
-        }
-      }
-  
-      .error {
-        color: red;
-        font-size: 0.9rem;
-      }
-  
-      .submitButton {
-        padding: 0.75rem;
-        background-color: #007bff;
-        color: white;
-        border: none;
-        border-radius: 4px;
+
+      label {
+        margin-bottom: 0.5rem;
         font-weight: bold;
-        cursor: pointer;
-  
-        &:disabled {
-          background-color: #6c757d;
-          cursor: not-allowed;
+      }
+
+      input {
+        padding: 0.5rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+
+        &:focus {
+          outline: none;
+          border-color: $primary-color;
         }
       }
     }
-  }
-  
-  .switchMode {
-    p {
+
+    .error {
+      color: red;
       font-size: 0.9rem;
-      color: #555;
-  
-      span {
-        color: #007bff;
-        cursor: pointer;
-        text-decoration: underline;
-  
-        &:hover {
-          color: #0056b3;
-        }
-      }
+    }
+
+  }
+}
+
+.switchMode {
+  text-align: center;
+  margin-top: 1rem;
+
+  span {
+    color: $primary-color;
+    cursor: pointer;
+    font-weight: $font-weight-bold;
+
+    &:hover {
+      text-decoration: underline;
     }
   }
-  
+}

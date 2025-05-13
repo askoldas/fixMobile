@@ -1,10 +1,15 @@
-import React, { useState } from "react";
-import { useDevices } from "@/hooks/useDevices"; // switch to useDevices hook
-import styles from "./styles/categories-manager.module.scss";
+'use client';
+
+import React, { useState } from 'react';
+import { useDevices } from '@/hooks/useDevices';
+import Button from '@/global/components/base/Button';
+import ConfirmDialog from '@/global/components/ui/ConfirmDialog';
+import InputPromptModal from '@/global/components/ui/InputPromptModal';
+import styles from './styles/categories-manager.module.scss';
 
 export default function CategoriesManager() {
   const {
-    devices: categories, // alias devices to categories so rest of the code stays unchanged
+    devices: categories,
     loading,
     error,
     addDevice: addCategory,
@@ -13,130 +18,131 @@ export default function CategoriesManager() {
   } = useDevices();
 
   const [expandedCategories, setExpandedCategories] = useState({});
+  const [promptData, setPromptData] = useState(null); // { mode, label, initialValue, onSubmit }
+  const [confirmData, setConfirmData] = useState(null); // { message, onConfirm }
 
-  const handleAddEntry = async (name, type, parent = "") => {
-    try {
-      await addCategory({ name, type, parent });
-      alert("Category added successfully!");
-    } catch (err) {
-      alert("Failed to add category. " + err.message);
-    }
+  const toggleExpand = (id) =>
+    setExpandedCategories((prev) => ({ ...prev, [id]: !prev[id] }));
+
+  const handleAddEntry = async (name, type, parent = '') => {
+    await addCategory({ name, type, parent });
   };
 
   const handleUpdateEntry = async (id, updatedData) => {
-    try {
-      await updateCategory(id, updatedData);
-      alert("Category updated successfully!");
-    } catch (err) {
-      alert("Failed to update category. " + err.message);
-    }
+    await updateCategory(id, updatedData);
   };
 
   const handleDeleteEntry = async (id) => {
-    try {
-      await deleteCategory(id);
-      alert("Category deleted successfully!");
-    } catch (err) {
-      alert("Failed to delete category. " + err.message);
-    }
-  };
-
-  const toggleExpand = (id) => {
-    setExpandedCategories((prev) => ({ ...prev, [id]: !prev[id] }));
+    await deleteCategory(id);
   };
 
   const buildNestedStructure = () => {
-    const categoryMap = {};
+    const map = {};
     categories.forEach((cat) => {
-      categoryMap[cat.id] = { ...cat, children: [] };
+      map[cat.id] = { ...cat, children: [] };
     });
 
-    const nestedCategories = [];
+    const nested = [];
     categories.forEach((cat) => {
       if (cat.parent) {
-        categoryMap[cat.parent]?.children.push(categoryMap[cat.id]);
+        map[cat.parent]?.children.push(map[cat.id]);
       } else {
-        nestedCategories.push(categoryMap[cat.id]);
+        nested.push(map[cat.id]);
       }
     });
 
-    return nestedCategories;
+    return nested;
   };
 
-  const renderCategories = (categories) => (
-    <ul className={styles["categories-list"]}>
-      {categories.map((category) => (
-        <li key={category.id} className={styles["category-item"]}>
+  const renderCategories = (cats) => (
+    <ul className={styles['categories-list']}>
+      {cats.map((category) => (
+        <li key={category.id} className={styles['category-item']}>
           <div
-            className={styles["category-details"]}
+            className={styles['category-details']}
             onClick={() => toggleExpand(category.id)}
           >
             <span>
               {category.name} ({category.type})
             </span>
-            <span className={styles["category-actions"]}>
-              <button
-                className={styles["edit-button"]}
+
+            <div className={styles['category-actions']}>
+              <Button
+                size="s"
+                variant="secondary"
                 onClick={(e) => {
                   e.stopPropagation();
-                  const newName = prompt("Enter new name", category.name);
-                  if (newName)
-                    handleUpdateEntry(category.id, { name: newName });
+                  setPromptData({
+                    label: 'Enter new name',
+                    initialValue: category.name,
+                    confirmLabel: 'Save',
+                    onSubmit: (value) =>
+                      handleUpdateEntry(category.id, { name: value }),
+                  });
                 }}
               >
                 Edit
-              </button>
-              <button
-                className={styles["delete-button"]}
+              </Button>
+
+              <Button
+                size="s"
+                variant="secondary"
                 onClick={(e) => {
                   e.stopPropagation();
-                  if (
-                    window.confirm("Are you sure you want to delete this entry?")
-                  ) {
-                    handleDeleteEntry(category.id);
-                  }
+                  setConfirmData({
+                    message: 'Are you sure you want to delete this entry?',
+                    onConfirm: () => handleDeleteEntry(category.id),
+                  });
                 }}
               >
                 Delete
-              </button>
-            </span>
+              </Button>
+            </div>
           </div>
-          {expandedCategories[category.id] &&
-            category.children.length > 0 && (
-              <div className={styles["nested-categories"]}>
-                {renderCategories(category.children)}
-              </div>
-            )}
-          {expandedCategories[category.id] && category.type === "brand" && (
-            <div className={styles["add-child-container"]}>
-              <button
-                className={styles["add-child-button"]}
+
+          {expandedCategories[category.id] && category.children.length > 0 && (
+            <div className={styles['nested-categories']}>
+              {renderCategories(category.children)}
+            </div>
+          )}
+
+          {expandedCategories[category.id] && category.type === 'brand' && (
+            <div className={styles['add-child-container']}>
+              <Button
+                size="s"
+                variant="primary"
                 onClick={(e) => {
                   e.stopPropagation();
-                  const childName = prompt("Enter new series name");
-                  if (childName) {
-                    handleAddEntry(childName, "series", category.id);
-                  }
+                  setPromptData({
+                    label: 'Enter new series name',
+                    confirmLabel: 'Add Series',
+                    onSubmit: (value) =>
+                      handleAddEntry(value, 'series', category.id),
+                  });
                 }}
               >
                 Add Series
-              </button>
+              </Button>
             </div>
           )}
-          {expandedCategories[category.id] && category.type === "series" && (
-            <div className={styles["add-child-container"]}>
-              <button
-                className={styles["add-child-button"]}
+
+          {expandedCategories[category.id] && category.type === 'series' && (
+            <div className={styles['add-child-container']}>
+              <Button
+                size="s"
+                variant="primary"
                 onClick={(e) => {
                   e.stopPropagation();
-                  const childName = prompt("Enter new model name");
-                  if (childName) {
-                    handleAddEntry(childName, "model", category.id);
-                  }
+                  setPromptData({
+                    label: 'Enter new model name',
+                    confirmLabel: 'Add Model',
+                    onSubmit: (value) =>
+                      handleAddEntry(value, 'model', category.id),
+                  });
                 }}
               >
                 Add Model
-              </button>
+              </Button>
             </div>
           )}
         </li>
@@ -145,22 +151,50 @@ export default function CategoriesManager() {
   );
 
   return (
-    <div className={styles["manager-container"]}>
-      <button
-        className={styles["add-button"]}
-        onClick={() => {
-          const brandName = prompt("Enter new brand name");
-          if (brandName) handleAddEntry(brandName, "brand");
-        }}
+    <div className={styles['manager-container']}>
+      <Button
+        variant="primary"
+        size="s"
+        onClick={() =>
+          setPromptData({
+            label: 'Enter new brand name',
+            confirmLabel: 'Add Brand',
+            onSubmit: (value) => handleAddEntry(value, 'brand'),
+          })
+        }
       >
         Add New Brand
-      </button>
+      </Button>
+
       {loading ? (
-        <p className={styles["loading"]}>Loading...</p>
+        <p className={styles.loading}>Loading...</p>
       ) : (
         renderCategories(buildNestedStructure())
       )}
-      {error && <p className={styles["error-message"]}>{error}</p>}
+
+      {error && <p className={styles['error-message']}>{error}</p>}
+
+      <InputPromptModal
+        isOpen={!!promptData}
+        label={promptData?.label}
+        confirmLabel={promptData?.confirmLabel}
+        initialValue={promptData?.initialValue || ''}
+        onSubmit={(value) => {
+          promptData?.onSubmit(value);
+          setPromptData(null);
+        }}
+        onClose={() => setPromptData(null)}
+      />
+
+      <ConfirmDialog
+        isOpen={!!confirmData}
+        message={confirmData?.message}
+        onConfirm={() => {
+          confirmData?.onConfirm();
+          setConfirmData(null);
+        }}
+        onClose={() => setConfirmData(null)}
+      />
     </div>
   );
 }

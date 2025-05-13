@@ -7,7 +7,8 @@ import {
 } from '@/store/slices/cartSlice';
 import { closeCart } from '@/store/slices/uiSlice';
 import { useRouter } from 'next/navigation';
-import styles from '@/global/styles/Cart.module.scss';
+import Button from '@/global/components/base/Button';
+import styles from '@/global/components/ui/cart.module.scss';
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -24,42 +25,70 @@ const Cart = () => {
 
   return (
     <div className={`${styles.cartDrawer} ${cartOpen ? styles.open : styles.closed}`}>
-      <div className="cart-header" style={{ padding: '1rem', borderBottom: '1px solid #ddd' }}>
-        <h2 style={{ margin: 0 }}>Your Cart</h2>
-        <button onClick={handleClose} style={{ float: 'right', fontSize: '1.2rem' }}>✕</button>
+      <div className={styles.header}>
+        <h2>Your Cart</h2>
+        <Button
+          variant="secondary"
+          size="s"
+          onClick={handleClose}
+          aria-label="Close cart"
+        >
+          ✕
+        </Button>
       </div>
 
-      <div style={{ flex: 1, overflowY: 'auto', padding: '1rem' }}>
+      <div className={styles.content}>
         {items.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
           items.map((item) => (
-            <div key={item.productId} style={{ marginBottom: '1rem' }}>
+            <div key={item.productId} className={styles.item}>
               <strong>{item.name}</strong>
               <p>€{item.price.toFixed(2)}</p>
-              <div>
-                <button onClick={() => dispatch(decreaseQuantity(item.productId))}>−</button>
-                <span style={{ margin: '0 0.5rem' }}>{item.quantity}</span>
-                <button onClick={() => dispatch(increaseQuantity(item.productId))}>+</button>
-                <button onClick={() => dispatch(removeFromCart(item.productId))} style={{ marginLeft: '1rem', color: 'red' }}>Remove</button>
+              <div className={styles.itemControls}>
+                <Button
+                  size="s"
+                  variant="secondary"
+                  onClick={() => dispatch(decreaseQuantity(item.productId))}
+                >
+                  −
+                </Button>
+                <span>{item.quantity}</span>
+                <Button
+                  size="s"
+                  variant="secondary"
+                  onClick={() => dispatch(increaseQuantity(item.productId))}
+                >
+                  +
+                </Button>
+                <Button
+                  size="s"
+                  variant="secondary"
+                  onClick={() => dispatch(removeFromCart(item.productId))}
+                  className={styles.removeButton}
+                >
+                  Remove
+                </Button>
               </div>
             </div>
           ))
         )}
       </div>
 
-      <div style={{ padding: '1rem', borderTop: '1px solid #ddd' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+      <div className={styles.footer}>
+        <div className={styles.total}>
           <span>Total:</span>
           <strong>€{totalPrice.toFixed(2)}</strong>
         </div>
-        <button
+        <Button
           onClick={handleCheckout}
+          variant="primary"
+          size="m"
           disabled={items.length === 0}
-          style={{ width: '100%', padding: '0.75rem', background: 'black', color: 'white' }}
+          style={{ width: '100%' }}
         >
           Proceed to Checkout
-        </button>
+        </Button>
       </div>
     </div>
   );

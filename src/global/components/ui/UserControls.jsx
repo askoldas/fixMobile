@@ -5,7 +5,7 @@ import { openAuthModal } from "@/store/slices/authSlice";
 import { toggleCart } from "@/store/slices/uiSlice"; // 🆕 Import cart toggle action
 import useAuth from "@/hooks/useAuth";
 import Button from "@/global/components/base/Button";
-import styles from "@/global/styles/UserControls.module.scss";
+import styles from "@/global/components/ui/userControls.module.scss";
 
 export default function UserControls() {
   const dispatch = useDispatch();
@@ -28,9 +28,6 @@ export default function UserControls() {
         <FaPhone />
         Contact Us
       </Button>
-      <Button variant="secondary" size="s" onClick={handleCartClick}>
-        <FaShoppingCart />
-      </Button>
       {!user ? (
         <Button variant="secondary" size="s" onClick={handleUserClick}>
           <FaUser />
@@ -40,6 +37,9 @@ export default function UserControls() {
           <FaSignOutAlt />
         </Button>
       )}
+      <Button variant="secondary" size="s" onClick={handleCartClick}>
+        <FaShoppingCart />
+      </Button>
     </div>
   );
 }
