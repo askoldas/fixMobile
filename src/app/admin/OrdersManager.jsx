@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { fetchDocuments } from '@/lib/firebaseUtils';
+import { fetchDocuments, updateDocument } from '@/lib/firebaseUtils';
 import styles from './styles/products-manager.module.scss'; // Reuse same styling
 
 export default function OrdersManager() {
@@ -26,6 +26,19 @@ export default function OrdersManager() {
 
   const toggleExpand = (id) => {
     setExpandedOrderId((prev) => (prev === id ? null : id));
+  };
+
+  const handleStatusChange = async (orderId, newStatus) => {
+    try {
+      await updateDocument('orders', orderId, { status: newStatus });
+      setOrders((prev) =>
+        prev.map((order) =>
+          order.id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
+    } catch (err) {
+      console.error('Failed to update status:', err);
+    }
   };
 
   return (
@@ -54,7 +67,15 @@ export default function OrdersManager() {
                 <strong>Order ID:</strong> {order.id}
               </div>
               <div>
-                <strong>Status:</strong> {order.status}
+                <strong>Status:</strong>{' '}
+                <select
+                  value={order.status}
+                  onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                >
+                  <option value="pending">Pending</option>
+                  <option value="ready">Ready</option>
+                  <option value="fulfilled">Fulfilled</option>
+                </select>
               </div>
               <div>
                 <strong>Total:</strong> €{order.totalPrice.toFixed(2)}
@@ -75,6 +96,7 @@ export default function OrdersManager() {
                   </ul>
                   <p><strong>Email:</strong> {order.contactInfo?.email}</p>
                   <p><strong>Phone:</strong> {order.contactInfo?.phone}</p>
+                  <p><strong>Payment Method:</strong> {order.paymentMethod}</p>
                   <p><strong>Address:</strong> {order.contactInfo?.address}</p>
                 </div>
               )}

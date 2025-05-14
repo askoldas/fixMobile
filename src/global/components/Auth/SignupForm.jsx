@@ -1,10 +1,16 @@
+'use client';
+
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import useAuth from '@/hooks/useAuth';
 import Button from '@/global/components/base/Button';
-import styles from './auth-modal.module.scss'; // Reuse modal styles
+import styles from './auth-modal.module.scss';
 
 const SignupForm = () => {
+  const router = useRouter();
   const { signup } = useAuth();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -24,6 +30,14 @@ const SignupForm = () => {
 
     try {
       await signup(email, password);
+
+      const auth = getAuth();
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          unsubscribe(); // ensure it only runs once
+          router.push('/user');
+        }
+      });
     } catch (err) {
       setError(err.message || 'Signup failed.');
     } finally {
