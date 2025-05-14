@@ -1,128 +1,155 @@
 .checkoutGrid {
-    display: grid;
-    grid-template-columns: 1fr 350px;
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: #fff;
-    border-radius: 8px;
-  
-    @media (max-width: 900px) {
-      grid-template-columns: 1fr;
-    }
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: #fff;
+  border-radius: 8px;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
   }
-  
-  .formColumn {
-    display: flex;
-    flex-direction: column;
+}
+
+.formColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.subtext {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.form input,
+.form select,
+.form textarea {
+  padding: 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+  background-color: #fff;
+}
+
+.form select {
+  appearance: none;
+}
+
+.nameRow,
+.row {
+  display: flex;
+  gap: 1rem;
+
+  & > input {
+    flex: 1;
   }
-  
-  .form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-  
-  .subtext {
-    font-size: 0.9rem;
-    color: #666;
-    margin-bottom: 1rem;
-  }
-  
-  .form input,
-  .form select,
-  .form textarea {
-    padding: 1rem;
-    font-size: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #fff;
-  }
-  
-  .form select {
-    appearance: none;
-  }
-  
-  .nameRow,
-  .row {
-    display: flex;
-    gap: 1rem;
-  
-    & > input {
-      flex: 1;
-    }
-  }
-  
-  .checkboxWrapper {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 0.5rem 0 1rem;
-  }
-  
-  .checkboxWrapper input[type='checkbox'] {
-    width: 16px;
-    height: 16px;
-    cursor: pointer;
-  }
-  
-  .checkboxWrapper label {
-    font-size: 0.95rem;
-    cursor: pointer;
-  }
-  
-  .form textarea {
-    resize: vertical;
-    min-height: 80px;
-  }
-  
-  .form button {
-    margin-top: 1rem;
-    padding: 1rem;
-    font-size: 1rem;
-    background: black;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    width: 100%;
-  }
-  
-  .cartSummary {
-    background: #f9f9f9;
-    padding: 1.5rem;
-    border-radius: 8px;
-    height: fit-content;
-  }
-  
-  .cartSummary h2 {
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-  }
-  
-  .cartSummary ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .cartSummary li {
-    margin-bottom: 0.5rem;
-    font-size: 0.95rem;
-  }
-  
-  .total {
-    font-weight: bold;
-    font-size: 1.1rem;
-    margin-top: 1rem;
-  }
-  
-  .error {
-    color: red;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-  }
-  
+}
+
+.checkboxWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.checkboxWrapper input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkboxWrapper label {
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.form textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form button {
+  margin-top: 1rem;
+  padding: 1rem;
+  font-size: 1rem;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.cartSummary {
+  background: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  height: fit-content;
+}
+
+.cartSummary h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.cartSummary ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cartSummary li {
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.total {
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+.paymentMethods {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.paymentMethods label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  color: #333;
+}
+
+.paymentMethods input[type='radio'] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.paymentMethods input[value='card'] {
+  cursor: not-allowed;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.error {
+  color: red;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}

@@ -29,6 +29,7 @@ export default function CheckoutPage() {
     municipality: '',
     postalCode: '',
     shippingAddress: '',
+    paymentMethod: 'cash',
   });
 
   const [error, setError] = useState(null);
@@ -112,6 +113,7 @@ export default function CheckoutPage() {
         deliveryAddress: shippingAddress,
         items: cart.items,
         totalPrice: cart.totalPrice,
+        paymentMethod: form.paymentMethod,
         createdAt: serverTimestamp(),
         status: 'pending',
       });
@@ -194,6 +196,41 @@ export default function CheckoutPage() {
               ))}
             </ul>
             <p className={styles.total}>Total: €{cart.totalPrice.toFixed(2)}</p>
+
+            <h3>Payment method</h3>
+            <div className={styles.paymentMethods}>
+              <label>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="cash"
+                  checked={form.paymentMethod === 'cash'}
+                  onChange={handleChange}
+                />
+                Cash on pickup
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="bank"
+                  checked={form.paymentMethod === 'bank'}
+                  onChange={handleChange}
+                />
+                Bank transfer
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="paymentMethod"
+                  value="card"
+                  checked={form.paymentMethod === 'card'}
+                  onChange={handleChange}
+                  disabled
+                />
+                Payment card
+              </label>
+            </div>
           </>
         )}
       </div>
