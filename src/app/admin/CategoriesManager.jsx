@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import slugify from 'slugify';
 import { useDevices } from '@/hooks/useDevices';
 import Button from '@/global/components/base/Button';
 import ConfirmDialog from '@/global/components/ui/ConfirmDialog';
@@ -18,14 +19,15 @@ export default function CategoriesManager() {
   } = useDevices();
 
   const [expandedCategories, setExpandedCategories] = useState({});
-  const [promptData, setPromptData] = useState(null); // { mode, label, initialValue, onSubmit }
-  const [confirmData, setConfirmData] = useState(null); // { message, onConfirm }
+  const [promptData, setPromptData] = useState(null);
+  const [confirmData, setConfirmData] = useState(null);
 
   const toggleExpand = (id) =>
     setExpandedCategories((prev) => ({ ...prev, [id]: !prev[id] }));
 
   const handleAddEntry = async (name, type, parent = '') => {
-    await addCategory({ name, type, parent });
+    const id = slugify(name, { lower: true });
+    await addCategory({ id, name, type, parent });
   };
 
   const handleUpdateEntry = async (id, updatedData) => {

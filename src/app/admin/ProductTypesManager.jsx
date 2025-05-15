@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import slugify from 'slugify';
 import {
   addDocument,
   updateDocument,
@@ -16,8 +17,8 @@ import styles from './styles/product-types-manager.module.scss';
 export default function ProductTypesManager() {
   const [productTypes, setProductTypes] = useState([]);
   const [expandedTypes, setExpandedTypes] = useState({});
-  const [promptData, setPromptData] = useState(null); // { label, confirmLabel, onSubmit, initialValue }
-  const [confirmData, setConfirmData] = useState(null); // { message, onConfirm }
+  const [promptData, setPromptData] = useState(null);
+  const [confirmData, setConfirmData] = useState(null);
 
   useEffect(() => {
     const fetchProductTypes = async () => {
@@ -38,8 +39,9 @@ export default function ProductTypesManager() {
   }, []);
 
   const handleAddType = async (name, parent = null) => {
-    const newType = { name, parent };
-    const addedType = await addDocument('ProductTypes', newType);
+    const id = slugify(name, { lower: true });
+    const newType = { id, name, parent };
+    const addedType = await addDocument('ProductTypes', newType, id);
     setProductTypes((prev) => [...prev, addedType]);
   };
 
@@ -97,8 +99,7 @@ export default function ProductTypesManager() {
                     label: 'Edit product type name',
                     confirmLabel: 'Save',
                     initialValue: type.name,
-                    onSubmit: (name) =>
-                      handleUpdateType(type.id, { name }),
+                    onSubmit: (name) => handleUpdateType(type.id, { name }),
                   });
                 }}
               >

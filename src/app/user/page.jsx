@@ -1,10 +1,7 @@
-import ClientOnly from '@/global/components/ClientOnly';
+'use client';
+
 import UserProfile from './UserProfile';
 
 export default function UserPage() {
-  return (
-    <ClientOnly>
-      <UserProfile />
-    </ClientOnly>
-  );
+  return <UserProfile />;
 }
