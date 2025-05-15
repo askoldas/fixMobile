@@ -5,6 +5,7 @@ import {
   deleteDocument,
   fetchDocuments,
 } from "@/lib/firebaseUtils";
+import slugify from "slugify";
 
 export const useDevices = () => {
   const [devices, setDevices] = useState([]);
@@ -36,7 +37,8 @@ export const useDevices = () => {
     }
 
     try {
-      const newDevice = await addDocument("Devices", device);
+      const id = slugify(device.name, { lower: true });
+      const newDevice = await addDocument("Devices", { ...device, id }, id);
       setDevices((prev) => [...prev, newDevice]);
     } catch (err) {
       console.error("Error adding device:", err);

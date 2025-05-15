@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { auth, db } from '../lib/firebase';
+import { auth, db } from '../lib/firebase.mjs';
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
