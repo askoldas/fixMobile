@@ -68,5 +68,5 @@ export const useDevices = () => {
     }
   };
 
-  return { devices, loading, error, addDevice, updateDevice, deleteDevice };
+  return { devices, loading, error, addDevice, updateDevice, deleteDevice, setDevices };
 };
