@@ -21,6 +21,7 @@ import { useDevices } from '@/hooks/useDevices';
 import Button from '@/global/components/base/Button';
 import ConfirmDialog from '@/global/components/ui/ConfirmDialog';
 import InputPromptModal from '@/global/components/ui/InputPromptModal';
+import { buildNestedListStructure } from '@/utils/buildNestedListStructure';
 import styles from './styles/categories-manager.module.scss';
 
 function SortableItem({ id, children, renderHandle }) {
@@ -79,29 +80,6 @@ export default function CategoriesManager() {
 
   const handleDeleteEntry = async (id) => {
     await deleteCategory(id);
-  };
-
-  const buildNestedStructure = (parentId = '') => {
-    const map = {};
-    categories.forEach((cat) => {
-      map[cat.id] = { ...cat, children: [] };
-    });
-
-    const nested = [];
-    categories.forEach((cat) => {
-      if (cat.parent) {
-        map[cat.parent]?.children.push(map[cat.id]);
-      } else {
-        nested.push(map[cat.id]);
-      }
-    });
-
-    const sortRecursive = (list) =>
-      list
-        .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-        .map((item) => ({ ...item, children: sortRecursive(item.children) }));
-
-    return sortRecursive(nested);
   };
 
   const handleDragEnd = (event) => {
@@ -273,7 +251,7 @@ export default function CategoriesManager() {
         {loading ? (
           <p className={styles.loading}>Loading...</p>
         ) : (
-          renderCategories(buildNestedStructure())
+          renderCategories(buildNestedListStructure(categories))
         )}
       </DndContext>
 

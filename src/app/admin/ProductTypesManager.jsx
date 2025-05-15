@@ -27,6 +27,7 @@ import {
 import Button from '@/global/components/base/Button';
 import ConfirmDialog from '@/global/components/ui/ConfirmDialog';
 import InputPromptModal from '@/global/components/ui/InputPromptModal';
+import { buildNestedListStructure } from '@/utils/buildNestedListStructure';
 import styles from './styles/product-types-manager.module.scss';
 
 function SortableItem({ id, children, renderHandle }) {
@@ -113,16 +114,6 @@ export default function ProductTypesManager() {
   const toggleExpand = (id) =>
     setExpandedTypes((prev) => ({ ...prev, [id]: !prev[id] }));
 
-  const buildNestedStructure = (parentId = null, depth = 0) => {
-    if (depth > 1) return [];
-    return productTypes
-      .filter((t) => t.parent === parentId)
-      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-      .map((t) => ({
-        ...t,
-        children: buildNestedStructure(t.id, depth + 1),
-      }));
-  };
 
   const handleDragEnd = (event) => {
   const { active, over } = event;
@@ -263,7 +254,7 @@ export default function ProductTypesManager() {
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
-        {renderProductTypes(buildNestedStructure())}
+        {renderProductTypes(buildNestedListStructure(productTypes))}
       </DndContext>
 
       <InputPromptModal
