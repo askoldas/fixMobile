@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import Button from "@/global/components/base/Button";
 import ImageSlider from "@/app/admin/components/ImageSlider";
 import styles from "@/app/admin/styles/product-editor.module.scss";
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import slugify from "slugify";
 
 export default function ProductEditor({
   productData = {},
@@ -48,10 +50,31 @@ export default function ProductEditor({
   const filteredSeries = categories.filter((cat) => cat.type === "series" && cat.parent === formData.brand);
   const filteredModels = categories.filter((cat) => cat.type === "model" && cat.parent === formData.series);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!formData.name || !formData.price || formData.models.length === 0 || !formData.productType) {
       alert("All fields are required.");
       return;
+    }
+
+    const storage = getStorage();
+    const uploadedPaths = [];
+
+    for (const file of newImages) {
+      const brandName = categories.find((c) => c.id === formData.brand)?.name || "unknown-brand";
+      const modelName = categories.find((c) => c.id === formData.models[0])?.name || "unknown-model";
+
+      const brandSlug = slugify(brandName, { lower: true });
+      const modelSlug = slugify(modelName, { lower: true });
+
+      const path = `products/${brandSlug}/${modelSlug}/${file.name}`;
+      const storageRef = ref(storage, path);
+
+      try {
+        await uploadBytes(storageRef, file);
+        uploadedPaths.push(path);
+      } catch (err) {
+        console.error("Image upload failed:", err);
+      }
     }
 
     const submission = {
@@ -60,7 +83,7 @@ export default function ProductEditor({
       price: parseFloat(formData.price),
       quantity: parseInt(formData.quantity),
       description: formData.description,
-      imageUrls: productData?.imageUrls || [],
+      imageUrls: [...(productData?.imageUrls || []), ...uploadedPaths],
       modelIds: formData.models,
       productTypeId: formData.productType,
       brandIds: formData.brand ? [formData.brand] : [],
@@ -146,7 +169,7 @@ export default function ProductEditor({
       {/* Actions */}
       <div className={styles.actions}>
         {productData?.id && onDelete && (
-          <Button variant="secondary" size="s" onClick={() => onDelete(productData.id)}>
+          <Button variant="secondary" size="s" onClick={onDelete}>
             Delete
           </Button>
         )}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Select from "react-select";
 import {
@@ -17,6 +17,7 @@ import ProductList from "@/app/admin/components/ProductList";
 import Pagination from "@/global/components/ui/Pagination";
 import Button from "@/global/components/base/Button";
 import useFilteredProducts from "@/hooks/useFilteredProducts";
+import ConfirmDialog from "@/global/components/ui/ConfirmDialog"; // Assumed path
 
 import styles from "./styles/products-manager.module.scss";
 
@@ -36,6 +37,7 @@ export default function ProductsManager() {
   const [selectedModel, setSelectedModel] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 25;
 
@@ -162,8 +164,7 @@ export default function ProductsManager() {
           setIsModalOpen(true);
         }}
         onDelete={(productId) => {
-          if (window.confirm("Are you sure you want to delete this product?"))
-            dispatch(deleteProduct(productId));
+          setPendingDeleteId(productId);
         }}
       />
 
@@ -178,6 +179,7 @@ export default function ProductsManager() {
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           onSubmit={(productData) => {
+            console.log("📤 Submitting product to Firestore:", productData);
             if (editingProduct) {
               dispatch(updateProduct(productData));
             } else {
@@ -190,6 +192,17 @@ export default function ProductsManager() {
           initialData={editingProduct}
           categories={categories}
           productTypes={productTypes}
+        />
+      )}
+
+      {pendingDeleteId && (
+        <ConfirmDialog
+          message="Are you sure you want to delete this product?"
+          onConfirm={() => {
+            dispatch(deleteProduct(pendingDeleteId));
+            setPendingDeleteId(null);
+          }}
+          onCancel={() => setPendingDeleteId(null)}
         />
       )}
     </div>
