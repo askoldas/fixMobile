@@ -1,0 +1,113 @@
+@use "@/global/variables" as *;
+
+.editorGrid {
+  display: grid;
+  grid-template-columns: 1fr 2fr 2fr;
+  gap: $spacing-lg;
+}
+
+.imagePreview {
+  text-align: center;
+
+  img {
+    width: 100%;
+    margin-bottom: $spacing-xs;
+    border-radius: 6px;
+  }
+
+  .imageControls {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      background: none;
+      border: none;
+      font-size: 1.25rem;
+      cursor: pointer;
+
+      &:disabled {
+        color: $light-gray;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .noImage {
+    width: 100%;
+    height: 150px;
+    border: 1px dashed $light-gray;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: $font-size-md;
+    color: $light-gray;
+    margin-bottom: $spacing-xs;
+  }
+}
+
+.formSection {
+  input,
+  textarea,
+  select {
+    display: block;
+    width: 100%;
+    margin-bottom: $spacing-sm;
+    padding: $spacing-xs;
+    border: 1px solid $light-gray;
+    border-radius: 4px;
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      border-color: $primary-color;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+}
+
+.modelList {
+  list-style: none;
+  padding: 0;
+  margin-top: $spacing-xs;
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: $lighter-gray;
+    padding: $spacing-xs $spacing-sm;
+    border-radius: 4px;
+    margin-bottom: $spacing-xs;
+
+    button {
+      background: none;
+      border: none;
+      color: $primary-color;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  }
+}
+
+.actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: $spacing-lg;
+
+  .deleteButton {
+    flex-shrink: 0;
+  }
+
+  .rightGroup {
+    display: flex;
+    gap: $spacing-sm;
+    margin-left: auto; // ensures buttons float right even if delete is missing
+  }
+}
+

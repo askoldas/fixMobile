@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useImageUrl } from "@/hooks/useImageUrl";
+import Button from "@/global/components/base/Button";
+import ImageSlider from "@/app/admin/components/ImageSlider";
+import styles from "@/app/admin/styles/product-editor.module.scss";
 
 export default function ProductEditor({
   productData = {},
@@ -7,7 +9,7 @@ export default function ProductEditor({
   productTypes = [],
   onSave,
   onCancel,
-  onDelete, // ✅ delete handler
+  onDelete,
 }) {
   const [formData, setFormData] = useState({
     name: "",
@@ -19,6 +21,8 @@ export default function ProductEditor({
     brand: "",
     series: "",
   });
+
+  const [newImages, setNewImages] = useState([]);
 
   useEffect(() => {
     if (productData) {
@@ -59,115 +63,38 @@ export default function ProductEditor({
       modelIds: formData.models,
       productTypeId: formData.productType,
       imageUrls: productData?.imageUrls || [],
+      // newImages will be uploaded later
     };
 
     onSave(submission);
   };
 
-  const imageUrls = productData?.imageUrls || [];
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const resolvedImageUrl = useImageUrl(imageUrls[currentImageIndex] || null);
-
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr 2fr", gap: "20px" }}>
-      {/* Column 1: Image Carousel */}
-      <div style={{ textAlign: "center", position: "relative" }}>
-        {resolvedImageUrl ? (
-          <>
-            <img
-              src={resolvedImageUrl}
-              alt={formData.name}
-              style={{ width: "100%", marginBottom: "10px", borderRadius: "6px" }}
-            />
-            {imageUrls.length > 1 && (
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <button
-                  type="button"
-                  onClick={() => setCurrentImageIndex((prev) => Math.max(prev - 1, 0))}
-                  disabled={currentImageIndex === 0}
-                >
-                  ←
-                </button>
-                <button
-                  type="button"
-                  onClick={() =>
-                    setCurrentImageIndex((prev) => Math.min(prev + 1, imageUrls.length - 1))
-                  }
-                  disabled={currentImageIndex === imageUrls.length - 1}
-                >
-                  →
-                </button>
-              </div>
-            )}
-          </>
-        ) : (
-          <div
-            style={{
-              width: "100%",
-              height: "150px",
-              border: "1px dashed #ccc",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "24px",
-              color: "#ccc",
-              marginBottom: "10px",
-            }}
-          >
-            No Image
-          </div>
-        )}
+    <div className={styles.editorGrid}>
+      {/* Column 1: Image Slider */}
+      <ImageSlider
+        imageUrls={productData?.imageUrls || []}
+        onAddImage={(file) => setNewImages((prev) => [...prev, file])}
+      />
+
+      {/* Column 2: Text Fields */}
+      <div className={styles.formSection}>
+        <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Product Name" />
+        <input type="text" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} placeholder="Price" />
+        <input type="number" value={formData.quantity} onChange={(e) => setFormData({ ...formData, quantity: e.target.value })} placeholder="Quantity" />
+        <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Description" />
       </div>
 
-      {/* Column 2: Text Inputs */}
-      <div>
-        <input
-          type="text"
-          value={formData.name}
-          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-          placeholder="Product Name"
-          style={{ display: "block", marginBottom: "10px", width: "100%" }}
-        />
-        <input
-          type="text"
-          value={formData.price}
-          onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-          placeholder="Price"
-          style={{ display: "block", marginBottom: "10px", width: "100%" }}
-        />
-        <input
-          type="number"
-          value={formData.quantity}
-          onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-          placeholder="Quantity"
-          style={{ display: "block", marginBottom: "10px", width: "100%" }}
-        />
-        <textarea
-          value={formData.description}
-          onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-          placeholder="Description"
-          style={{ display: "block", marginBottom: "10px", width: "100%", height: "80px" }}
-        />
-      </div>
-
-      {/* Column 3: Select Fields */}
-      <div>
-        <select
-          value={formData.productType}
-          onChange={(e) => setFormData({ ...formData, productType: e.target.value })}
-          style={{ marginBottom: "10px", width: "100%" }}
-        >
+      {/* Column 3: Selects */}
+      <div className={styles.formSection}>
+        <select value={formData.productType} onChange={(e) => setFormData({ ...formData, productType: e.target.value })}>
           <option value="">Select Product Type</option>
           {productTypes.map((type) => (
             <option key={type.id} value={type.id}>{type.name}</option>
           ))}
         </select>
 
-        <select
-          value={formData.brand}
-          onChange={(e) => setFormData({ ...formData, brand: e.target.value, series: "", models: [] })}
-          style={{ marginBottom: "10px", width: "100%" }}
-        >
+        <select value={formData.brand} onChange={(e) => setFormData({ ...formData, brand: e.target.value, series: "", models: [] })}>
           <option value="">Select Brand</option>
           {filteredBrands.map((brand) => (
             <option key={brand.id} value={brand.id}>{brand.name}</option>
@@ -175,11 +102,7 @@ export default function ProductEditor({
         </select>
 
         {formData.brand && (
-          <select
-            value={formData.series}
-            onChange={(e) => setFormData({ ...formData, series: e.target.value, models: [] })}
-            style={{ marginBottom: "10px", width: "100%" }}
-          >
+          <select value={formData.series} onChange={(e) => setFormData({ ...formData, series: e.target.value, models: [] })}>
             <option value="">Select Series</option>
             {filteredSeries.map((series) => (
               <option key={series.id} value={series.id}>{series.name}</option>
@@ -188,23 +111,20 @@ export default function ProductEditor({
         )}
 
         {formData.series && (
-          <div>
-            <select
-              onChange={(e) => {
-                const selected = e.target.value;
-                if (selected && !formData.models.includes(selected)) {
-                  setFormData((prev) => ({ ...prev, models: [...prev.models, selected] }));
-                }
-              }}
-              style={{ marginBottom: "10px", width: "100%" }}
-            >
+          <>
+            <select onChange={(e) => {
+              const selected = e.target.value;
+              if (selected && !formData.models.includes(selected)) {
+                setFormData((prev) => ({ ...prev, models: [...prev.models, selected] }));
+              }
+            }}>
               <option value="">Select Model</option>
               {filteredModels.map((model) => (
                 <option key={model.id} value={model.id}>{model.name}</option>
               ))}
             </select>
 
-            <ul>
+            <ul className={styles.modelList}>
               {formData.models.map((model) => (
                 <li key={model}>
                   {categories.find((c) => c.id === model)?.name}
@@ -219,51 +139,20 @@ export default function ProductEditor({
                 </li>
               ))}
             </ul>
-          </div>
+          </>
         )}
       </div>
 
-      {/* Action Buttons */}
-      <div style={{ gridColumn: "1 / -1", display: "flex", justifyContent: "space-between", marginTop: "20px" }}>
+      {/* Actions */}
+      <div className={styles.actions}>
         {productData?.id && onDelete && (
-          <button
-            onClick={() => onDelete(productData.id)}
-            style={{
-              padding: "8px 12px",
-              backgroundColor: "#dc3545",
-              color: "#fff",
-              border: "none",
-              borderRadius: "4px"
-            }}
-          >
+          <Button variant="secondary" size="s" onClick={() => onDelete(productData.id)}>
             Delete
-          </button>
+          </Button>
         )}
-        <div style={{ display: "flex", gap: "10px" }}>
-          <button
-            onClick={handleSubmit}
-            style={{
-              padding: "8px 12px",
-              backgroundColor: "#28a745",
-              color: "#fff",
-              border: "none",
-              borderRadius: "4px"
-            }}
-          >
-            Save
-          </button>
-          <button
-            onClick={onCancel}
-            style={{
-              padding: "8px 12px",
-              backgroundColor: "#ffc107",
-              color: "#fff",
-              border: "none",
-              borderRadius: "4px"
-            }}
-          >
-            Cancel
-          </button>
+        <div className={styles.rightGroup}>
+          <Button variant="primary" size="s" onClick={handleSubmit}>Save</Button>
+          <Button variant="secondary" size="s" onClick={onCancel}>Cancel</Button>
         </div>
       </div>
     </div>
