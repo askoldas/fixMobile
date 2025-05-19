@@ -19,8 +19,8 @@ export default function ImageSlider({ imageUrls = [], onAddImage }) {
     currentIndex < imageUrls.length
       ? resolvedStorageUrl
       : currentIndex < totalSlides - 1
-      ? URL.createObjectURL(newImages[currentIndex - imageUrls.length])
-      : null;
+        ? URL.createObjectURL(newImages[currentIndex - imageUrls.length])
+        : null;
 
   const handleImageSelect = (e) => {
     const file = e.target.files?.[0];
@@ -42,18 +42,6 @@ export default function ImageSlider({ imageUrls = [], onAddImage }) {
   return (
     <div className={styles.slider}>
       <div className={styles.previewWrapper}>
-        {currentIndex > 0 && (
-          <div className={`${styles.navArrow} ${styles.left}`} onClick={handlePrev}>
-            ❮
-          </div>
-        )}
-
-        {currentIndex < totalSlides - 1 && (
-          <div className={`${styles.navArrow} ${styles.right}`} onClick={handleNext}>
-            ❯
-          </div>
-        )}
-
         <div className={styles.preview}>
           {isUploadSlide ? (
             <div
@@ -74,6 +62,21 @@ export default function ImageSlider({ imageUrls = [], onAddImage }) {
           ) : (
             <div className={styles.noImage}>No Image</div>
           )}
+        </div>
+        <div className={styles.controls}>
+          <button
+            onClick={handlePrev}
+            className={`${styles.arrow} ${currentIndex === 0 ? styles.hidden : ""}`}
+          >
+            ❮
+          </button>
+          <button
+            onClick={handleNext}
+            className={`${styles.arrow} ${currentIndex === totalSlides - 1 ? styles.hidden : ""
+              }`}
+          >
+            ❯
+          </button>
         </div>
       </div>
     </div>
