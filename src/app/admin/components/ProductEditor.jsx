@@ -60,10 +60,10 @@ export default function ProductEditor({
       price: parseFloat(formData.price),
       quantity: parseInt(formData.quantity),
       description: formData.description,
+      imageUrls: productData?.imageUrls || [],
       modelIds: formData.models,
       productTypeId: formData.productType,
-      imageUrls: productData?.imageUrls || [],
-      // newImages will be uploaded later
+      brandIds: formData.brand ? [formData.brand] : [],
     };
 
     onSave(submission);

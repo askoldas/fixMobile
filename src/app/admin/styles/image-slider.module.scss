@@ -48,34 +48,27 @@
   }
 }
 
-.navArrow {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 24px;
-  background-color: rgba(0, 0, 0, 0.1);
+.controls {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: $text-color;
-  font-size: 1.25rem;
-  cursor: pointer;
-  z-index: 1;
-  user-select: none;
+  justify-content: space-between;
+  margin-top: $spacing-xs;
 
-  &:hover {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
+  .arrow {
+    background-color: $lighter-gray;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 1.25rem;
+    color: $text-color;
+    cursor: pointer;
+    min-width: 40px;
 
-  &.left {
-    left: 0;
-    border-top-left-radius: 6px;
-    border-bottom-left-radius: 6px;
-  }
+    &:hover {
+      background-color: $light-gray;
+    }
 
-  &.right {
-    right: 0;
-    border-top-right-radius: 6px;
-    border-bottom-right-radius: 6px;
+    &.hidden {
+      visibility: hidden;
+    }
   }
 }
