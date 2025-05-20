@@ -229,19 +229,22 @@ export default function CategoriesManager() {
 
   return (
     <div className={styles['manager-container']}>
-      <Button
-        variant="primary"
-        size="s"
-        onClick={() =>
-          setPromptData({
-            label: 'Enter new brand name',
-            confirmLabel: 'Add Brand',
-            onSubmit: (value) => handleAddEntry(value, 'brand'),
-          })
-        }
-      >
-        Add New Brand
-      </Button>
+      <div className={styles['header-row']}>
+        <h3>Devices</h3>
+        <Button
+          variant="primary"
+          size="s"
+          onClick={() =>
+            setPromptData({
+              label: 'Enter new brand name',
+              confirmLabel: 'Add Brand',
+              onSubmit: (value) => handleAddEntry(value, 'brand'),
+            })
+          }
+        >
+          Add New Brand
+        </Button>
+      </div>
 
       <DndContext
         sensors={sensors}

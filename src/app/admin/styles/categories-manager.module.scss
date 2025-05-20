@@ -1,6 +1,17 @@
 .manager-container {
     padding: 20px;
     font-family: Arial, sans-serif;
+
+    .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+
+    h3 {
+      margin: 0;
+    }
+  }
   
     .add-button {
       padding: 10px 20px;

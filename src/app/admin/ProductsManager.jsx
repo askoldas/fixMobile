@@ -17,7 +17,7 @@ import ProductList from "@/app/admin/components/ProductList";
 import Pagination from "@/global/components/ui/Pagination";
 import Button from "@/global/components/base/Button";
 import useFilteredProducts from "@/hooks/useFilteredProducts";
-import ConfirmDialog from "@/global/components/ui/ConfirmDialog"; // Assumed path
+import ConfirmDialog from "@/global/components/ui/ConfirmDialog"; 
 
 import styles from "./styles/products-manager.module.scss";
 

@@ -234,21 +234,22 @@ export default function ProductTypesManager() {
 
   return (
     <div className={styles['manager-container']}>
-      <h3>Product Types</h3>
-      <Button
-        variant="primary"
-        size="s"
-        onClick={() =>
-          setPromptData({
-            label: 'Enter new product type name',
-            confirmLabel: 'Add',
-            onSubmit: (name) => handleAddType(name),
-          })
-        }
-      >
-        Add New Product Type
-      </Button>
-
+  <div className={styles['header-row']}>
+    <h3>Product Types</h3>
+    <Button
+      variant="primary"
+      size="s"
+      onClick={() =>
+        setPromptData({
+          label: 'Enter new product type name',
+          confirmLabel: 'Add',
+          onSubmit: (name) => handleAddType(name),
+        })
+      }
+    >
+      Add New Product Type
+    </Button>
+  </div>
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
