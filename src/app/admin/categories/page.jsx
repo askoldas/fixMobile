@@ -9,14 +9,12 @@ export default function CategoriesPage() {
     <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
 
       <section style={{ marginBottom: '40px' }}>
-        <h2 style={{ marginBottom: '10px' }}>Devices</h2>
         <ClientOnly>
           <CategoriesManager />
         </ClientOnly>
       </section>
 
       <section>
-        <h2 style={{ marginBottom: '10px' }}>Product Types</h2>
         <ClientOnly>
           <ProductTypesManager />
         </ClientOnly>
